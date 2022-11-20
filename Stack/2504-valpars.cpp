@@ -4,6 +4,75 @@
 
 using namespace std;
 
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+
+    stack<char> p;
+    
+    string input;
+    cin >> input;
+    int temp = 1;
+    int res = 0;
+
+    for (int i = 0; i < input.length(); ++i)
+    {
+        if (input[i] == '(')
+        {
+            temp *= 2;
+            p.push(input[i]);
+        }
+        else if (input[i] == '[')
+        {
+            temp *= 3;
+            p.push(input[i]);
+        }
+        else if (input[i] == ')')
+        {
+            if (p.empty() || p.top() != '(')
+            {
+                cout << 0 << endl;
+                return 0;
+            }
+
+            if (input[i-1] == '(')
+            {
+                res += temp;
+            }
+            temp /= 2;
+            p.pop();
+        }
+        else
+        {
+            if (p.empty() || p.top() != '[')
+            {
+                cout << 0 << endl;
+                return 0;
+            }
+
+            if (input[i-1] == '[')
+            {
+                res += temp;
+            }
+            temp /= 3;
+            p.pop();
+        }
+        //cout << "current : " << input[i] << res << endl;
+    }
+
+    // 마지막 !! 안빌수도 있다 (())[[] 같은거
+    if (!p.empty())
+    {
+        cout << 0;
+        return 0;
+    }
+
+    cout << res << endl;
+    return 0;
+
+}
+
 int getsum(stack<int> s)
 {
   int res =0;
@@ -17,6 +86,19 @@ int getsum(stack<int> s)
 
 void printStack(stack<int> s)
 {
+    cout << "My s is :";
+  while (!s.empty())
+  {
+    cout << s.top() << endl;
+    s.pop();
+  }
+  cout << endl;
+}
+
+
+void printStack(stack<char> s)
+{
+    cout << "My pars is :";
   while (!s.empty())
   {
     cout << s.top() << endl;
@@ -24,6 +106,20 @@ void printStack(stack<int> s)
   }
 }
 
+void printSum(stack<int> s)
+{
+    cout << "My Sums is :";
+  while (!s.empty())
+  {
+    cout << s.top() << endl;
+    s.pop();
+  }
+  cout << endl;
+}
+
+
+/*
+my algorithm
 int main()
 {
   ios_base::sync_with_stdio(false);
@@ -39,18 +135,13 @@ int main()
   int i = 0;
   while (i < in.length())
   {
-    // 0. pars 가 비었으면 sum 에 s의 합을 넣기
-    if (pars.empty())
-    {
-      while (!s.empty())
-      {
-        sums.push(s.top()); s.pop();
-      }
-    }
+    // cout << "current par is " << in[i] << endl;
+    
 
     // 1. 두개의 괄호 받기
     char p1 = in[i];
     char p2 = in[i+1];
+    bool flag;
 
     // 2. () 나 [] 면 i 는 2올려주고 s에는 알맞은 값 넣어주기
     if (p1=='(')
@@ -59,6 +150,10 @@ int main()
       {
         i += 2;
         s.push(2);
+        // printStack(pars);
+        // printStack(s);
+        // printSum(sums);
+        // cout <<endl;
         continue;
       }
       else
@@ -73,6 +168,10 @@ int main()
       {
         i += 2;
         s.push(3);
+        // printStack(pars);
+        // printStack(s);
+        // printSum(sums);
+        // cout <<endl;
         continue;
       }
       else
@@ -85,34 +184,65 @@ int main()
     {
       if (pars.top() != '(')
       {
-        cout << "not complete" << endl;
-        cout << 1 << endl;
+        cout << 0 << endl;
         return 1;
       }
       else
       {
+        pars.pop();
+        flag = (pars.empty()) ? true : false;
+        i++;
+      }
+
+      if (flag) // par is empty
+      {
+            int t = 0;
+            while (!s.empty())
+            {
+                t += s.top(); s.pop();
+            }
+            sums.push(t*2);
+      }
+      else 
+      {
         int add = s.top() * 2; s.pop();
         s.push(add);
-        i++;
       }
     }
     else
     {
       if (pars.top() != '[')
       {
-        cout << "not complete" << endl;
-        cout << 1 << endl;
+        cout << 0 << endl;
         return 1;
       }
       else
       {
-        int add = s.top() * 2; s.pop();
-        s.push(add);
+        pars.pop();
+        flag = (pars.empty()) ? true : false;
         i++;
       }
+
+      if (flag) // par is empty
+      {
+            int t = 0;
+            while (!s.empty())
+            {
+                t += s.top(); s.pop();
+            }
+            sums.push(t*3);
+      }
+      else 
+      {
+        int add = s.top() * 3; s.pop();
+        s.push(add);
+      }
     }
-    cout << "current sums stack is :" <<endl;
-    printStack(sums);
+    
+    // printStack(pars);
+    // printStack(s);
+    // printSum(sums);
+    // cout <<endl;
   }
 
   int res = 0;
@@ -122,4 +252,6 @@ int main()
     sums.pop();
   }
 
+    cout << res << endl;
 }
+*/
