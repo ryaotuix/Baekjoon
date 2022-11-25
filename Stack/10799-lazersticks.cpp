@@ -13,7 +13,7 @@ int main()
 
     stack<char> pars;
     int i = 0;
-    int sticks = 0; // number of sticks currently
+    // int sticks = 0; // number of sticks currently we ... we don't need it we can use stack.size()
     int segments = 0; // number of segments in total
 
     bool justopened = false;
@@ -24,7 +24,7 @@ int main()
         if(s[i] == '(')
         {
             pars.push(s[i]);
-            sticks++;
+            //sticks++;
             justopened = true;
         }
         else if (s[i] == ')')
@@ -32,15 +32,15 @@ int main()
             if (justopened)
             {
                 pars.pop();
-                sticks--;
-                segments += sticks;
+                //sticks--;
+                segments += pars.size();
                 justopened = false;
             }
             else 
             {
                 pars.pop();
                 segments++;
-                sticks--;
+                //sticks--;
             }
         }
         i++;
