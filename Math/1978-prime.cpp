@@ -4,10 +4,15 @@ using namespace std;
 
 bool isPrime(int x)
 {
-    for (int i = 1; i< x; i++)
+    if (x==1) return false;
+    if (x==2) return true;
+
+    for (int i = 2; i< x; i++)
     {
-        
+        if (x%i==0) return false;
     }
+
+    return true;
 }
 
 int main()
@@ -16,5 +21,15 @@ int main()
     cin.tie(0);
 
     int n; cin >> n;
+    int res = 0;
+    int t;
 
+    for (int i = 0; i<n; i++)
+    {
+        cin >> t;
+        if (isPrime(t)) res++;
+    }
+
+    cout << res << endl;
+    return 0;
 }
