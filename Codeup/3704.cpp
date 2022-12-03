@@ -24,7 +24,8 @@ int count(int stairs)
     if (dp[stairs] != 0) return dp[stairs];
 
     // if not add it to the Memoization 
-    dp[stairs] = count(stairs-1) + count(stairs-2) + count(stairs-3);
+    
+    dp[stairs] = (count(stairs-1) + count(stairs-2) + count(stairs-3)) % 1000;
     return dp[stairs];
 }
 
@@ -36,7 +37,7 @@ int main()
 
     int stairs; cin >> stairs;
 
-    cout << count(stairs)%1000 << endl;
+    cout << count(stairs) << endl;
 
     return 0;
 }
