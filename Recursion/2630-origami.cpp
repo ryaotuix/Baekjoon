@@ -12,6 +12,7 @@ int blue = 0;
 int white = 0;
 int n;
 
+// x = start, y = start, l = length of one side
 void test(int x, int y, int l) // <0, 0, n> to start
 {
     // base case
@@ -30,15 +31,28 @@ void test(int x, int y, int l) // <0, 0, n> to start
     }
 
     // Check if the square is same color
-    int col = dp[y][x]; 
+    int color = dp[y][x]; 
     bool isSame = true;
     
-    for (int i = y; i < y + l; i++)
+    for (int i = y; i < y + l; i++) // i = y (rows)
     {
-        for (int j = x; j < x + l; j++)
-        {}
+        for (int j = x; j < x + l; j++) // j = x (columns)
+        {
+            // if they are not the same
+            if (dp[i][j] != color) 
+            {
+                isSame = false;
+                test(x, y, l/2); // Check I (Upper left)
+                test(x + (l/2), y, l/2); // Check II (Upper right)
+                test(x, y + (l/2), l/2); // Check III (Lower left)
+                test(x + (l/2), y + (l/2), l/2); // Check IV (Lower right)
+                return;
+            }
+        }
     }
 
+    if (isSame && color == 1) blue++;
+    else if (isSame && color == 0) white++;
 
 }
 
@@ -58,16 +72,21 @@ int main()
     }
 
     // Print 2D array
-    cout << "=============== PRINT ================" << endl;
-    for (int i=0; i<n; i++)
-    {
-        for (int j =0; j<n; j++)
-            cout << dp[i][j] << " ";
+    // cout << "=============== PRINT ================" << endl;
+    // for (int i=0; i<n; i++)
+    // {
+    //     for (int j =0; j<n; j++)
+    //         cout << dp[i][j] << " ";
         
-        cout << endl;
-    }
+    //     cout << endl;
+    // }
 
+    // Do Receursion
+    test(0,0,n);
 
+    // print the values
+    cout << white << endl; 
+    cout << blue << endl;
 
 
     return 0;
