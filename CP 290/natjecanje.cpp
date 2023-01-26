@@ -3,6 +3,9 @@
 
 using namespace std;
 
+
+
+
 int main()
 {
     ios_base::sync_with_stdio(false);
@@ -35,5 +38,8 @@ int main()
         int teamToCheck = damagedTeams.back();
         damagedTeams.pop_back();
     }
+
+    int res = 0;
+    
 
 }
