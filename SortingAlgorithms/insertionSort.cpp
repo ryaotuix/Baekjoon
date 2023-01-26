@@ -1,5 +1,7 @@
 #include <iostream>
 #include <time.h>
+#include <bits/stdc++.h>
+
 
 using namespace std;
 
@@ -18,17 +20,14 @@ void printArr();
 
 void insertionSort()
 {
-   for (int i = 1; i < len; i++)
-   {
-        cout << "ITER " << i+1 << ": ";
-        for (int j = i; j > 0; j--)
+    for (int i = 1; i < len; i++)
+    {
+        for (int j = i; j > 0 ; j--)
         {
-            printArr();
             if (arr[j] < arr[j-1]) swap(arr[j], arr[j-1]);
             else break;
         }
-        printArr();
-   }
+    }
 }
 
 void printArr()
@@ -40,6 +39,9 @@ void printArr()
 int main()
 {
     printArr();
+    shuffle(arr, arr + len, default_random_engine(0));
+    printArr();
+
     cout << "------------------\n";
     int start = clock();
     insertionSort();
