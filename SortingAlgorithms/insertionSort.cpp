@@ -1,4 +1,5 @@
 #include <iostream>
+#include <time.h>
 
 using namespace std;
 
@@ -40,6 +41,11 @@ int main()
 {
     printArr();
     cout << "------------------\n";
+    int start = clock();
     insertionSort();
+    int end = clock();
     printArr();
+
+    cout << "RUN : " << end-start << " amount of time\n";
+
 }
