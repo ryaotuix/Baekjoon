@@ -1,4 +1,5 @@
 #include <iostream>
+#include <bits/stdc++.h>
 #include <time.h>
 
 using namespace std;
@@ -44,6 +45,9 @@ void printArr()
 int main()
 {
     printArr();
+    shuffle(arr, arr + len, default_random_engine(0));
+    printArr();
+
     int start = clock();
     cout << "------------------\n";
     selectionSort();
