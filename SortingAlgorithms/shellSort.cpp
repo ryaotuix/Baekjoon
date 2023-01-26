@@ -22,24 +22,17 @@ void printArr();
 void shellSort()
 {
     int gap = 1;
-    while (gap < len/3) gap = gap * 3 + 1;
-
+    while (gap < len/3) gap = 3 * gap + 1;
     while (gap > 0)
     {
         for (int i = gap; i < len; i++)
         {
-            // 시발 여기가 존나 에바잖아
-            // starting from the index of gap
-            // SWAP only iff
-            // j < j-gap
-            // and j >= gap << THIS IS BECAUSE (j < gap) is treated already + it never stops
-            for (int j = i; (arr[j] < arr[j-gap]) && j >= gap; j -= gap)
+            for (int j = i; arr[j] < arr[j-gap] && j >= gap; j -= gap)
                 swap(arr[j], arr[j-gap]);
         }
-
         gap /= 3;
     }
-
+    
 }
 
 void printArr()

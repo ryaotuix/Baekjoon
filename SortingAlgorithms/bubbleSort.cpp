@@ -18,17 +18,12 @@ void printArr();
 
 void bubbleSort()
 {
-    for(int i = 0; i < len; i++)
+    for (int i = 0; i < len; i++)
     {
-        cout << "ITER " << i+1 << ": ";
         for (int j = 0; j < len-i-1; j++)
         {
-            printArr();
-            cout << "\n";
             if (arr[j] > arr[j+1]) swap(arr[j], arr[j+1]);
-            
         }
-        printArr();
     }
 }
 

@@ -22,18 +22,14 @@ void selectionSort()
 {
     for (int i = 0; i < len; i++)
     {
-        cout << "ITER " << i+1 << " : \n";
         int minInd = i;
-        int j;
-        for(j = i+1; j < len; j++)
+        for (int j = i+1; j < len; j++)
         {
-            printArr();
-            if (arr[j] < arr[minInd]) minInd = j;
-            //cout << "minInd : " << minInd << "\n";
+            if (arr[minInd] > arr[j]) minInd = j;
         }
         swap(arr[i], arr[minInd]);
-        printArr();
     }
+    
 }
 
 void printArr()
