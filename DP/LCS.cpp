@@ -26,8 +26,8 @@ using namespace std;
 
 string S = "ABAZDC";
 string T = "BACBAD";
-int sLen = 0;
-int tLen = 0;
+const int sLen = 6;
+const int tLen = 6;
 
 int max(int &a, int &b)
 {
@@ -55,8 +55,14 @@ int LCS(string S, int sLen, string T, int tLen)
 int LCSmemoized(string S, int sLen, string T, int tLen, int ** matrix)
 {
     int res;
-    if (sLen == 0 || tLen == 0) return 0; // if one of the strings is empty
-    if (matrix[sLen][tLen] != -1) return 
+
+    // if one of the strings is empty
+    if (sLen == 0 || tLen == 0) {
+        matrix[sLen][tLen] = 0; 
+        return 0;
+    }
+
+    if (matrix[sLen][tLen] != -1) return matrix[sLen][tLen]; // if matrix already has a value
 
     if (S[sLen] == T[tLen]) 
         res = 1 + LCS(S, sLen-1, T, tLen-1); 
@@ -64,36 +70,57 @@ int LCSmemoized(string S, int sLen, string T, int tLen, int ** matrix)
     else 
         res = max(LCS(S, sLen-1, T, tLen), LCS(S, sLen, T, tLen-1));
 
+    // !Memoization!
+    matrix[sLen][tLen] = res; 
     return res;
 }
 
-
+void print2D(auto ** matrix, int row, int col)
+{
+    cout << "================================================\n";
+    for (int i = 0; i < row; i++)
+    {
+        for (int j = 0; j < col; j++)
+        {
+            cout << matrix[i][j] << " ";
+        }
+        cout << "\n";
+    }
+    cout << "================================================\n";
+}
 
 // top-down Dynamic Programming
 
+
+
+// MAIN 
 int main()
 {
     ios_base::sync_with_stdio(false);
-    cin.tie(0); cout.tie(0);
+    cin.tie(0); cout.tie(0);    
 
-    //cin >> S;
-    sLen = S.length();
+    // Dynamically allocate 2D int Array 
+    int ** matrix = new int * [sLen];
+    for (int i = 0; i < sLen; i++)
+        matrix[i] = new int[tLen];
 
-    //cin >> T;
-    tLen = T.length();
+    // fill the 2D Array <matrix> with -1
+    for (int i = 0; i < sLen; i++)
+        for (int j = 0; j < tLen; j++)
+            matrix[i][j] = -1;
 
-    // matrix for length
-    int matrix = new int [sLen][tLen];
+    print2D(matrix, sLen, tLen);
 
-    // matrix for string
+
+    // Dynamically allocate 2D string Array
     string ** mat = new string * [sLen];
     for (int i = 0; i < sLen; i++)
         mat[i] = new string [tLen];
     
-    // cout << "String S : " << S << "\n";
-    // cout << "String T : " << T << "\n";
-    // cout << "S length : " << sLen << "\n" << "T length : " << tLen << "\n";
+    print2D(mat, sLen, tLen);
+    
     
     cout << "MAX num : " << LCS(S, sLen, T, tLen) << "\n";
+    cout << "MAX num : " << LCSmemoized(S, sLen, T, tLen, matrix) << "\n";
 
 }
