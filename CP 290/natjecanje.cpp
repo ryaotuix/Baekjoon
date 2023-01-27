@@ -55,14 +55,14 @@ int main()
             continue;
         }
         // then check ind - 1
-        if (arr[ind-1] == true && ind-1 > 0)
+        if (ind-1 >= 1 && arr[ind-1] == true)
         {
             arr[ind-1] = false;
             res--;
             continue;
         }
         // then check ind + 1
-        if (arr[ind+1] == true && (ind+1) <total)
+        if ((ind+1) <= total && arr[ind+1] == true)
         {
             arr[ind+1] = false;
             res--;
