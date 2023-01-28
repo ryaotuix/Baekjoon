@@ -23,16 +23,22 @@ void shellSort()
 {
     int gap = 1;
     while (gap < len/3) gap = 3 * gap + 1;
+    
     while (gap > 0)
     {
         for (int i = gap; i < len; i++)
         {
+            cout << "Starting index i is : " << i << endl;
+            printArr();
             for (int j = i; arr[j] < arr[j-gap] && j >= gap; j -= gap)
+            {
                 swap(arr[j], arr[j-gap]);
+                printArr();
+            }
         }
+
         gap /= 3;
     }
-    
 }
 
 void printArr()

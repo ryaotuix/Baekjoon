@@ -20,6 +20,9 @@ C  1  2  3  3  3  4
 
 
 #include <iostream>
+#include <assert.h>
+#include <algorithm>
+#include <iomanip>
 
 
 using namespace std;
@@ -29,22 +32,18 @@ string T = "BACBAD";
 const int sLen = 6;
 const int tLen = 6;
 
-int max(int &a, int &b)
-{
-    return (a > b) ? a : b;
-}
 
-// bottom-up Dynamic Programming
 
 // without memoization
-int LCS(string S, int sLen, string T, int tLen)
+int LCS(string &S, int sLen, string &T, int tLen)
 {
     int res;
-    if (sLen == 0 || tLen == 0) return 0; // if one of the strings is empty
-
+    // BASE CASE :
+    if (sLen == 0 || tLen == 0) return 0; // if we are at the first index of either string
+    // CASE 1 : if the letter matches +1 from the one diagonally from top left of it
     if (S[sLen] == T[tLen]) 
         res = 1 + LCS(S, sLen-1, T, tLen-1); 
-
+    // CASE 2 : if the letters don't match bring the max(top, left)
     else 
         res = max(LCS(S, sLen-1, T, tLen), LCS(S, sLen, T, tLen-1));
 
@@ -52,11 +51,11 @@ int LCS(string S, int sLen, string T, int tLen)
 }
 
 // with memoization
-int LCSmemoized(string S, int sLen, string T, int tLen, int ** matrix)
+int LCSmemoized(string &S, int sLen, string &T, int tLen, int ** matrix)
 {
     int res;
 
-    // if one of the strings is empty
+    // if we are at the first index of either string
     if (sLen == 0 || tLen == 0) {
         matrix[sLen][tLen] = 0; 
         return 0;
@@ -75,6 +74,7 @@ int LCSmemoized(string S, int sLen, string T, int tLen, int ** matrix)
     return res;
 }
 
+
 void print2D(auto ** matrix, int row, int col)
 {
     cout << "================================================\n";
@@ -82,7 +82,7 @@ void print2D(auto ** matrix, int row, int col)
     {
         for (int j = 0; j < col; j++)
         {
-            cout << matrix[i][j] << " ";
+            cout << left << setw(2) << matrix[i][j] << " ";
         }
         cout << "\n";
     }
@@ -96,31 +96,43 @@ void print2D(auto ** matrix, int row, int col)
 // MAIN 
 int main()
 {
+    bool flag = true;
     ios_base::sync_with_stdio(false);
-    cin.tie(0); cout.tie(0);    
-
+    
     // Dynamically allocate 2D int Array 
-    int ** matrix = new int * [sLen];
-    for (int i = 0; i < sLen; i++)
-        matrix[i] = new int[tLen];
+    int ** matrix = new int * [sLen+1];
+    for (int i = 0; i < sLen+1; i++)
+        matrix[i] = new int[tLen+1];
+
+    // fill the 2D Array <matrix> with 0
+    for (int i = 0; i < sLen+1; i++)
+        for (int j = 0; j < tLen+1; j++)
+            matrix[i][j] = 0;
 
     // fill the 2D Array <matrix> with -1
-    for (int i = 0; i < sLen; i++)
-        for (int j = 0; j < tLen; j++)
+    for (int i = 1; i < sLen+1; i++)
+        for (int j = 1; j < tLen+1; j++)
             matrix[i][j] = -1;
 
-    print2D(matrix, sLen, tLen);
+    print2D(matrix, sLen+1, tLen+1);
 
 
     // Dynamically allocate 2D string Array
-    string ** mat = new string * [sLen];
-    for (int i = 0; i < sLen; i++)
-        mat[i] = new string [tLen];
+    // string ** mat = new string * [sLen];
+    // for (int i = 0; i < sLen; i++)
+    //     mat[i] = new string [tLen];
     
-    print2D(mat, sLen, tLen);
+    //print2D(mat, sLen, tLen);
     
+
+
+
+
     
-    cout << "MAX num : " << LCS(S, sLen, T, tLen) << "\n";
+    //cout << "MAX num : " << LCS(S, sLen, T, tLen) << "\n";
+    //flag = false;
+    
     cout << "MAX num : " << LCSmemoized(S, sLen, T, tLen, matrix) << "\n";
+    print2D(matrix, sLen+1, tLen+1);
 
 }
