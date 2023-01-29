@@ -14,14 +14,14 @@ int twoCitySchedCost(vector<vector<int>>& costs) {
     int res = 0;
     sort(costs.begin(), costs.end(), compare);
 
-    // for (int i = 0; i < costs.size(); i++)
-    // {
-    //     cout << "{";
-    //     for (int j = 0; j < costs[0].size(); j++) {
-    //         cout << costs[i][j] << ",";
-    //     }
-    //     cout << "}" << " ";
-    // }
+    for (int i = 0; i < costs.size(); i++)
+    {
+        cout << "{";
+        for (int j = 0; j < costs[0].size(); j++) {
+            cout << costs[i][j] << ",";
+        }
+        cout << "}" << " ";
+    }
 
     // given that size of costs is even
     int len = costs.size();

@@ -1,12 +1,18 @@
 #include <stdio.h>
 
 int main() {
-    register int i;
-    register int k;
+    int i = 0;
+    int j = 0;
+    while (1)
+    {
+        i++;
+        if (i == 3) break;
+    }
 
-    i = 5;
-    k = i * 3;
+    while (j != 3)
+    {
+        j++;
+    }
 
-    printf("i = %d, k = %d\n" , i, k);
-    return 0;
+    printf("%d %d\n", i, j);
 }
