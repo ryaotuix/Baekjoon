@@ -3,7 +3,7 @@
 
 using namespace std;
 
-int arr[] = {10, 2, 4, 3, 1, 7, 9, 8, 5, 6, 10, 2, 4, 3, 1, 7, 9, 8, 5, 6};
+int arr[] = {1,3,5,7, 2,4,8,10};
 
 
 const int len = sizeof(arr)/sizeof(int);
@@ -17,42 +17,61 @@ void swap(int & a, int & b)
     b = temp;
 }
 
-void printArr()
+void printArr(int n)
 {
-    for (int i = 0; i < len; i++)
+    for (int i = 0; i < n; i++)
         cout << arr[i] << " ";
     cout << "\n";
 }
 
+void printAux()
+{
+    for (int i = 0; i < len; i++)
+        cout << aux[i] << " ";
+    cout << "\n";
+}
+
+
 
 // void merge(arr, int low, int mid, int hi)
-void merge(int arr[])
+void merge(int * arr, int low, int mid, int hi)
 {
-    int low = 0;
-    int mid = len/2;
-    int hi = len;
-    
-    int i = 0;
-    int j = len/2 + 1;
-    for (int k = 0; k <= hi; k++)
-    {
-        aux[k] = arr[k];
-    }
+    int i = low;
+    int j = mid+1;
+    cout << "low : " << low << " mid : " << mid << " hi : " << hi << "\n";
 
+
+    // copy into Auxiliary array
     for (int k = low; k <= hi; k++)
-    {
-        if (i > mid) arr[k] = aux[j++];
-        else if (j > hi) arr[k] = aux[i++];
-        else if (aux[j], aux[i]) arr[k] = aux[j++];
+        aux[k] = arr[k];
+
+    int iter = 1;
+    int k;
+    for (k = low; k <= hi; k++)
+    {   
+        cout << "ITER : " << iter++ << "\n";
+        cout << "i : " << i << " j : " << j << "\n";
+
+        if (i > mid) arr[k] = aux[j++]; // if we used all right sides  ->  use all left sides
+        else if (j > hi) arr[k] = aux[i++]; // if we used all all the right sides  ->  use all right sides
+        else if (aux[j] < aux[i]) arr[k] = aux[j++];
         else arr[k] = aux[i++];
+
+        cout << "Arr: ";
+        printArr(k);
+        cout << "Aux: ";
+        printAux();
+        cout << "\n";
     }
+    printArr(k);
 }
 
 int main()
 {
-    shuffle(arr, arr+len, default_random_engine(0));
-    printArr();
-
-    merge(arr);
-    printArr();
+    // printArr();
+    int lo = 0;
+    int hi = len -1;
+    int mid = hi/2;
+    merge(arr, lo, mid, hi);
+    // printArr();
 }
