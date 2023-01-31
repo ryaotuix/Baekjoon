@@ -61,11 +61,14 @@ void MaxHeap::deleteTop()
     sinkDown(1);
 }
 
+
+
 int main()
 {
     MaxHeap x;
     x.printInfo();
     cout << "\n";
+
     x.swimUP(x.size);
     x.printInfo();
     cout << "\n";

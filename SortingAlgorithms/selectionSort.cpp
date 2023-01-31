@@ -23,12 +23,12 @@ void selectionSort()
     for (int i = 0; i < len; i++)
     {
         int minInd = i;
-        for (int j = i+1; j < len; j++)
+        for (int j = i; j < len; j++)
         {
             if (arr[j] < arr[minInd]) minInd = j;
         }
-        swap(arr[i], arr[minInd]);
-    }    
+        swap(arr[minInd], arr[i]);
+    }
 }
 
 void printArr()
