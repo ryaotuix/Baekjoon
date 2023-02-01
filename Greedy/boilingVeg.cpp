@@ -26,10 +26,10 @@ void print(auto * arr, int n)
 int main()
 {
     string r; cin >> r;
-    int ratio = stoi(r.substr(2));
-    cout << ratio;
+    int ratio = stoi(r.substr(2)); // this change substring starting index of 2 into a ratio
+    // cout << ratio;
+
     int n; cin >> n;
-    return 1;
     fruit fruits[n+1];
 
     // store weight information
@@ -38,19 +38,22 @@ int main()
         cin >> fruits[i+1].org;
     }
     
-    
 
     int res = 0;
     fruit ultmax;
     fruit ultmin;
 
+
+    // when to end? max * ratio <= min
+    // max *mincut * ratio <= min * maxcut
     while (true)
     {
         ultmax = *max_element(fruits+1, fruits+n+1); // max fruit
         ultmin = *min_element(fruits+1, fruits+n+1); // min fruit
-        int max = ultmax.org;
-        int min = ultmin.org;
-        //if (max * ratio  <= min) break;
+        int max = ultmax.org; int min = ultmin.org; int maxcut = ultmax.cut; int mincut = ultmin.cut;
+        // cout << max << " " << maxcut << " " << min << " " << mincut << "\n";
+        // cout << max * mincut * ratio << " " << 100* min * maxcut;
+        if (max * mincut * ratio  <= 100* min * maxcut) break;
 
         for (int i =1; i<= n; i++)
         {
@@ -60,9 +63,6 @@ int main()
                 res++;
             }
         }
-
-        cout << max << " " << min << "\n";
-        cout << "===================================\n"; 
     }
     cout << res << endl;
     

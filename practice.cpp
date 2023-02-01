@@ -11,64 +11,63 @@
 // 7. get maximum element from the array 
 // 8. accept decimal (2 decimal places, 3 decimal places), and change it to integer
 
+
 using namespace std;
 
-// 1. 
 struct book{
-    int size;
     string name;
+    int size;
     bool operator<(book& other) {
         if (size == other.size) return name < other.name;
-        return size <other.size;
+        return size < other.size;
     }
-    void printBook() {
-        cout << "Book's name : " << name << "\n";
-        cout << "Book's size : " << size << "\n";
+    void printBook()
+    {
+        cout << "Name : " << name << "\n";
+        cout << "Size : " << size << "\n"; 
     }
 };
 
-bool cmp(const book &a, const book&b)
+bool cmp(const book&a, const book&b)
 {
-    if  (a.size != b.size) return a.size > b.size;
-    return a.name > b.name;
+    if (a.size == b.size) return a.name > b.name;
+    else return a.size > b.size;
 }
 
 int main()
 {
-    string s; cin >> s; // let's say it is always 0.99 (two decimal places)
-    int i = stoi(s.substr(2,1)); // stoi(string.(starting index, length))
-    cout << i;
-    // 1.
-    book a = book{1000, "B thrown of glass"};
-    book b = book{1000, "A harry potter"};
-    book c = book{10, "C my lil ponny"};
+    string s; cin >> s;
+    int x = stoi(s.substr(2, 4)); // ex) 3.141592 ==> 1415
+    cout << x << endl;
 
-    book arr[4]; arr[1] = a; arr[2] = b; arr[3] = c;
-    arr[0].printBook(); arr[1].printBook(); arr[2].printBook(); arr[3].printBook(); 
-        sort(arr+1, arr+4);
+    vector<book> library;
 
+    book arr[5];
+    book a = {"Harry Potter", 520}; arr[1] = a;
+    book b = {"Lord of the rings", 1000}; arr[2] = b;
+    book c = {"Bible", 5000}; arr[3] = c;
+    book d = {"A Piano Tutorial", 1000}; arr[4] = d;
 
-    cout << endl;
-    vector<book> library = {a, b, c};
-    
-    sort(library.begin(), library.end()); // sort ascending
-    sort(library.begin(), library.end(), cmp); // sort descending
-    
-    for (int i =1 ; i<4; i++)
-    {
-        arr[i].printBook();
-    }
-    // for (auto& book : arr) book.printBook();
+    // push in a vector called library
+    library.push_back(c); library.push_back(b); library.push_back(a); library.push_back(d);
 
-    priority_queue<int> maxPQ;
-    priority_queue<int, vector<int>, greater<int>> minPQ;
-    minPQ.push(1);
-    minPQ.push(3);
-    minPQ.push(0);
-    while (!minPQ.empty())
-    {
-        cout << minPQ.top() << " ";
-        minPQ.pop();
-    }
+    // print arr and sort arr
+    for (int i = 1; i <5; i++) arr[i].printBook();
+    sort(arr+1, arr+5, cmp);
+    cout << "---------------sorted-----------------\n";
+    for (int i = 1; i <5; i++) arr[i].printBook();
+
+    book min = *min_element(arr+1, arr+5);
+    book max = *max_element(arr+1, arr+5);
+    cout << "MIN: ";
+    min.printBook();
+    cout << "MAX: ";
+    max.printBook();
+
+    // print vector and sort vector
+    // for (auto book : library) book.printBook();
+    // sort(library.begin(), library.end(), cmp);
+    // cout << "--------------sorted---------------\n";
+    // for (auto book : library) book.printBook();
 
 }
