@@ -30,7 +30,7 @@ void MaxHeap::printInfo()
 void MaxHeap::swimUP(int ind)
 {
     int x = ind;
-    while (ind > 1 && maxHeap[ind/2] < maxHeap[ind])
+    while (ind > 1 && maxHeap[ind/2] < maxHeap[ind]) // if the parent < this leaf
     {
         swap(maxHeap[ind/2], maxHeap[ind]);
         ind = ind/2;
@@ -40,7 +40,7 @@ void MaxHeap::swimUP(int ind)
 void MaxHeap::insert(int x)
 {
     size++;
-    maxHeap.push_back(x);
+    maxHeap.push_back(x); 
     swimUP(size);
 }
 void MaxHeap::sinkDown(int ind)
