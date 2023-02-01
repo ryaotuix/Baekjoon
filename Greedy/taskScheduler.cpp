@@ -9,12 +9,6 @@ int main()
     int n = 2;
 
     unordered_map<char, int> umap;
-    
-
-
-
-
-
 
 
     // unordered_map<char, int> umap;
