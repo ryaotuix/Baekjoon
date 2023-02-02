@@ -11,7 +11,9 @@ struct triple{
     }
 };
 
+// int arr[] = {-10,25,-9,15,-6,-6,11,-5,8,8,-4,6,0,5,1,3};
 int arr[] = {-10,25,-9,15,-6,11,-5,8,-4,6,0,5,1,3};
+
 int len = sizeof(arr)/sizeof(arr[0]);
 
 void printArr(int * arr, int len)
@@ -30,14 +32,16 @@ int threeSum(int * arr, int len, int goal)
     for (i = 0; i < len; i++)
     {
         j = i+1; k = len-1; // j is after i and k is at the end
-        while (j < k)
+        while (j < k) // Iterate O(n) times 
         {
             int sum = arr[i] + arr[j] + arr[k];
             if (sum < goal) j++;
             else if (sum > goal) k--;
             else // sum == goal
             {
+                cout << arr[i] << " " << arr[j] << " " << arr[k] << endl;
                 res++;
+                // THIS ONLY WORKS IF THE ELEMENTS ARE UNIQUE
                 j++;
                 k--;
             } 
