@@ -13,6 +13,11 @@ class MaxHeap
         void insert(int x);
         void sinkDown(int ind);
         void deleteTop();
+        void makeHeap(vector<int> v) {
+            move(v.begin())
+            maxHeap = v;
+            size = v.size()-1;
+        }
 };
 
 void swap(int &a, int &b) 
@@ -60,6 +65,8 @@ void MaxHeap::deleteTop()
     size--;
     sinkDown(1);
 }
+
+
 
 
 

@@ -10,6 +10,7 @@
 // 6. get minimum element from the array
 // 7. get maximum element from the array 
 // 8. accept decimal (2 decimal places, 3 decimal places), and change it to integer
+// 9. move vector elements 1 right
 
 
 using namespace std;
