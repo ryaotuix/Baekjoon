@@ -24,6 +24,7 @@ class myComparative
 
 int main()
 {
+    // ios_base::sync_with_stdio(false);
     ios_base::sync_with_stdio(false);
     int numHelp, numCoworker; // < 10^5 
     cin >> numHelp >> numCoworker;
