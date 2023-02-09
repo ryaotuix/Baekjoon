@@ -11,64 +11,68 @@
 // 7. get maximum element from the array 
 // 8. accept decimal (2 decimal places, 3 decimal places), and change it to integer
 // 9. move vector elements 1 right
-
+// 10. hashmap using map <int, int>
 
 using namespace std;
 
-struct book{
+struct book
+{
     string name;
     int size;
-    bool operator<(book& other) {
-        if (size == other.size) return name < other.name;
-        return size < other.size;
-    }
-    void printBook()
-    {
-        cout << "Name : " << name << "\n";
-        cout << "Size : " << size << "\n"; 
+    bool operator<(book & other) { return size > other.size;}
+    void printInfo(){
+        cout << name << " " << size << endl;
     }
 };
 
-bool cmp(const book&a, const book&b)
+class MyCompare
 {
-    if (a.size == b.size) return a.name > b.name;
-    else return a.size > b.size;
+    public: 
+    bool operator()(const book & a, const book& b)
+    {
+        if (a.size == b.size) return a.name < b.name;
+        return a.size < b.size;
+    }
+};
+
+
+void printV(vector<auto>&v)
+{
+    for (int i = 0; i < v.size(); i++)
+    {
+        v[i].printInfo();
+    }
+    cout << endl;
 }
+
 
 int main()
 {
-    string s; cin >> s;
-    int x = stoi(s.substr(2, 4)); // ex) 3.141592 ==> 1415
-    cout << x << endl;
+    book a = {"Harry Potter", 1000};
+    book b = {"Bible", 5000};
+    book c = {"Lord", 10};
+    book d = {"A book", 10};
+    vector<book> v = {a, b, c, d};
+    printV(v);
+    sort(v.begin(), v.end(), MyCompare());
+    printV(v);
+    sort(v.begin(), v.end());
+    printV(v);
 
-    vector<book> library;
+    priority_queue<book, vector<book>, MyCompare> pq;
+    pq.push(a);
+    pq.push(b);
+    pq.push(c);
+    pq.push(d);
 
-    book arr[5];
-    book a = {"Harry Potter", 520}; arr[1] = a;
-    book b = {"Lord of the rings", 1000}; arr[2] = b;
-    book c = {"Bible", 5000}; arr[3] = c;
-    book d = {"A Piano Tutorial", 1000}; arr[4] = d;
-
-    // push in a vector called library
-    library.push_back(c); library.push_back(b); library.push_back(a); library.push_back(d);
-
-    // print arr and sort arr
-    for (int i = 1; i <5; i++) arr[i].printBook();
-    sort(arr+1, arr+5, cmp);
-    cout << "---------------sorted-----------------\n";
-    for (int i = 1; i <5; i++) arr[i].printBook();
-
-    book min = *min_element(arr+1, arr+5);
-    book max = *max_element(arr+1, arr+5);
-    cout << "MIN: ";
-    min.printBook();
-    cout << "MAX: ";
-    max.printBook();
-
-    // print vector and sort vector
-    // for (auto book : library) book.printBook();
-    // sort(library.begin(), library.end(), cmp);
-    // cout << "--------------sorted---------------\n";
-    // for (auto book : library) book.printBook();
+    while (!pq.empty())
+    {
+        book curr = pq.top();
+        curr.printInfo();
+        pq.pop();
+    }
 
 }
+
+
+
