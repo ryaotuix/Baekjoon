@@ -42,6 +42,7 @@ void MaxHeap::swimUP(int ind)
     }
     cout << "index " << x << " (i.e) MaxHeap[" << x << "] : " << maxHeap[ind] << " Swam UP!\n";
 }
+
 void MaxHeap::insert(int x)
 {
     size++;

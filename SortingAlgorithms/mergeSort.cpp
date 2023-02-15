@@ -123,12 +123,12 @@ int main()
     printArr(len);
 
     // <TOP DOWN MERGE>
-    // TopDownMerge x;
-    // x.sort(arr, len);
+    TopDownMerge x;
+    x.sort(arr, len);
 
     // <BOTTOM UP MERGE>
-    BottomUpMerge y;
-    y.sort(arr, len);
+    // BottomUpMerge y;
+    // y.sort(arr, len);
     
 
     // CHECKING MERGE 
