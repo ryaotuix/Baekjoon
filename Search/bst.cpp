@@ -27,6 +27,9 @@ void Node::printNode()
     cout << "key: " << key << " value: " << value << " n: " << n << endl;
 }
 
+
+int height = 0;
+
 class BST
 {
 public:
@@ -39,6 +42,7 @@ public:
     //  DIFFERENT TRAVERSALS
     void inOrder(Node *mid)
     {
+        height++;
         if (mid == NULL)
         {
             cout << "it's null";
@@ -131,6 +135,7 @@ public:
         curr->printNode();
         return curr;
     }
+
  
     // INSERTION
     Node * insert(Node *x, string key, int val)
@@ -161,28 +166,74 @@ public:
         return x;
     }
 
-    // DELETE
+    // DELETE  THANK YOU GFG!!! ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ
+    Node* deleteNode(Node* root, string k)
+{
+    // Base case
+    if (root == NULL)
+        return root;
+ 
+    // Other Base Cases
+    if (root->key > k) {
+        root->left = deleteNode(root->left, k);
+        return root;
+    }
+    else if (root->key < k) {
+        root->right = deleteNode(root->right, k);
+        return root;
+    }
+ 
+    // We reach here when root is the node
+    // to be deleted.
+ 
+    // If one of the children is empty
+    if (root->left == NULL) {
+        Node* temp = root->right;
+        delete root;
+        return temp;
+    }
+    else if (root->right == NULL) {
+        Node* temp = root->left;
+        delete root;
+        return temp;
+    }
+ 
+    // If both children exist
+    else {
+ 
+        Node* succParent = root;
+ 
+        // Find successor
+        Node* succ = root->right;
+        while (succ->left != NULL) {
+            succParent = succ;
+            succ = succ->left;
+        }
+ 
+        // Delete successor.  Since successor
+        // is always left child of its parent
+        // we can safely make successor's right
+        // right child as left of its parent.
+        // If there is no succ, then assign
+        // succ->right to succParent->right
+        if (succParent != root)
+            succParent->left = succ->right;
+        else
+            succParent->right = succ->right;
+ 
+        // Copy Successor Data to root
+        root->key = succ->key;
+ 
+        // Delete Successor and return root
+        delete succ;
+        return root;
+    }
+}
+ 
 };
 
 int main()
 {
-    // Node * a = new Node ("a", 1 , 1);
-    // Node * b = new Node ("b", 2, 1);
-    // Node * c = new Node ("c", 3, 1);
-    // Node * d = new Node ("d", 4, 1);
-    // Node * e = new Node ("e", 5, 1);
-    // Node * f = new Node ("f", 6, 1);
-    // Node * g = new Node ("g", 7, 1);
-    // Node * h = new Node ("h", 8, 1);
-
-    // d->left = b;
-    // b->left = a;
-    // b->right = c;
-    // d->right = f;
-    // f->left = e;
-    // f->right = g;
-    // g->right = h;
-
     BST bst;
     bst.insert(bst.root, "d", 4);
 
@@ -198,7 +249,12 @@ int main()
     bst.findMin();
 
     bst.inOrder(bst.root);
+    cout << "================================\n";
+    // bst.root = bst.deleteNode(bst.root, "d");
+    // bst.inOrder(bst.root);
     // bst.preOrder(bst.root);
     // bst.postOrder(bst.root);
     // int res = bst->get(bst->root, "f");
+
+    cout << height << endl;
 }
