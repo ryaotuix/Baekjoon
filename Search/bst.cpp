@@ -19,7 +19,7 @@ Node::Node(string k, int v, int count)
 {
     key = k;
     value = v;
-    n = count;
+    n = count; // tlqkf 이건 안썼네;;;;
 }
 
 void Node::printNode()
@@ -28,7 +28,6 @@ void Node::printNode()
 }
 
 
-int height = 0;
 
 class BST
 {
@@ -42,7 +41,6 @@ public:
     //  DIFFERENT TRAVERSALS
     void inOrder(Node *mid)
     {
-        height++;
         if (mid == NULL)
         {
             cout << "it's null";
@@ -229,7 +227,43 @@ public:
         return root;
     }
 }
- 
+    
+    // Successor
+    Node * successor(Node * x)
+    {
+        cout << "Successor : ";
+        Node * curr;
+        if (x->right != NULL)
+        {
+            curr = x->right;
+            while (curr->left != NULL)
+            {
+                curr = curr -> left; 
+            }
+            curr ->printNode();
+            return curr;
+        }
+        x->printNode();
+        return x;
+    }
+
+    // Predecessor
+    Node * predecessor(Node * x)
+    {
+        cout << "Predecessor : ";
+        Node * curr;
+        if (x->left != NULL)
+        {
+            curr = x->left;
+            while (curr -> right != NULL)
+                curr = curr -> right;
+            
+            curr->printNode();
+            return curr;
+        }
+        x->printNode();
+        return x;
+    }
 };
 
 int main()
@@ -256,5 +290,6 @@ int main()
     // bst.postOrder(bst.root);
     // int res = bst->get(bst->root, "f");
 
-    cout << height << endl;
+    bst.successor(bst.root);
+    bst.predecessor(bst.root);
 }
