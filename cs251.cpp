@@ -129,21 +129,30 @@ int search(vector<int> &nums, int target)
    } 
 }
 
+int hashFunction(int x)
+{
+    double temp = x * 0.618;
+    temp = temp - (int)temp;
+    temp *= 10;
+    cout << "x is " << x << endl;
+    cout << "temp is " << temp << endl;
+    
+    return (int) ceil(temp);
+}
+
+void applyHash(vector<int> &v)
+{
+    for (int i = 0; i < v.size(); i++)
+    {
+        cout << hashFunction(v[i]) << "\n\n";
+    }
+    cout << endl;
+}
+
 int main()
 {
-    // vector<int> v = {1,3,5,9,10};
-    // int target = 3;
-    // cout << binary(v, target, 0, v.size()-1);
-    int sum = 0;
-    int n = 64;
-    for (int i = 1; i <= n; i *=4)
-    {
-        for (int j =0; j<i; j = j+1)
-        {
-            cout << sum << endl;
-            sum++;
-        }
-    }
-
-    cout << sum << endl;
+    vector<int> v = {1025, 2305, 5760, 2020, 1950, 6030, 8955, 3405, 6000};
+    applyHash(v);
+    cout << hashFunction(4956) << endl;
+    cout << hashFunction(7631) << endl;
 }
