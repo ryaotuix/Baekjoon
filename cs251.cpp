@@ -151,8 +151,32 @@ void applyHash(vector<int> &v)
 
 int main()
 {
-    vector<int> v = {1025, 2305, 5760, 2020, 1950, 6030, 8955, 3405, 6000};
-    applyHash(v);
-    cout << hashFunction(4956) << endl;
-    cout << hashFunction(7631) << endl;
+    // vector<int> v = {1025, 2305, 5760, 2020, 1950, 6030, 8955, 3405, 6000};
+    // applyHash(v);
+    // cout << hashFunction(4956) << endl;
+    // cout << hashFunction(7631) << endl;
+
+    
+// CPP Program to demonstrate the implementation of multimap
+
+    multimap<int, int> gquiz1; // empty multimap container
+ 
+    // insert elements in random order
+    gquiz1.insert(pair<int, int>(1, 40));
+    gquiz1.insert(pair<int, int>(2, 30));
+    gquiz1.insert(pair<int, int>(3, 60));
+    gquiz1.insert(pair<int, int>(6, 50));
+    gquiz1.insert(pair<int, int>(6, 10));
+ 
+    // printing multimap gquiz1
+    multimap<int, int>::iterator itr;
+    cout << "\nThe multimap gquiz1 is : \n";
+    cout << "\tKEY\tELEMENT\n";
+    for (itr = gquiz1.begin(); itr != gquiz1.end(); ++itr) {
+        cout << '\t' << itr->first << '\t' << itr->second
+             << '\n';
+    }
+
+    
+    cout << endl;
 }
