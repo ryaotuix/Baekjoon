@@ -24,9 +24,22 @@ int main()
     }
     sort(votes.begin(), votes.end(), greater<int>());
 
-    for (int i = 0; i < votes.size(); i++)
-        cout << votes[i] << " ";
-    cout << endl; 
+    // for (int i = 0; i < votes.size(); i++)
+    //     cout << votes[i] << " ";
+    // cout << endl; 
 
+    int max = votes[0];
+    int count = 0;
+    while (me <= max)
+    {
+        me++;
+        count++;
+        votes[0] = votes[0] - 1; // decrement the max
+        sort(votes.begin(), votes.end(), greater<int>());
+        max = votes[0];     // update the maximum
+    }
+
+    cout << count << endl;
+    return 0;
 
 }
