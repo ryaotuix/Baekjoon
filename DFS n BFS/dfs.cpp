@@ -31,7 +31,7 @@ class Graph
         int numNodes;   
         vector<Node *> nodes;                                   // Node vector of this graph
         vector<bool> visited;                                   // visited array
-        int dfsCNT;                                             // DFS Count for DfsNum and DfsFinNum
+        int dfsCNT = 0;                                             // DFS Count for DfsNum and DfsFinNum
         
         // extra fields
         vector<edge> backEdges;
@@ -43,7 +43,7 @@ class Graph
 
         // Method
         void dfs(char startNodeName);                           // traverse the graph once from the given node
-        void dfsALL();                                          // traverse the entire graph from the beginning       
+        void dfsALL(char starNodeName);                                          // traverse the entire graph from the beginning       
         void graphInfo();                                       // print graph Info 
 
         // extra methods
@@ -128,6 +128,7 @@ Graph::Graph(string filename, bool transpose)
         Node * curr = this->nodes[i];
         sort(curr->adj.begin(), curr->adj.end(), compareNode);
     }   
+
 }
 
 
@@ -162,7 +163,13 @@ void Graph::dfs(char startNodeName)
 
 }
 
-void Graph::dfsALL() { for (auto curr : g.nodes) dfs(curr->name);}
+void Graph::dfsALL(char startNodeName) {
+    dfs(startNodeName);
+    for (int i = 0; i < visited.size(); ++i)
+    {
+        if (visited[i] == false) dfs(i + 'A');
+    }
+}
 
 void Graph::graphInfo()
 {
@@ -199,6 +206,10 @@ int main()
     string filename = "nodesInput.txt";
     bool transpose = false;
     Graph g(filename, transpose);
-    g.dfsALL();
+
+    for  (auto curr : g.nodes)
+    {
+        g.dfs(curr->name);
+    }
     g.graphInfo();
 }
