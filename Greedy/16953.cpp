@@ -2,45 +2,41 @@
 
 using namespace std;
 
-int K;
-int N;
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(0);
 
-// 100 for N, 9+1 for possible digit range, +2 for padding
-double Y[100+1][9+3];
+	int A, B;
+	cin >> A >> B;
+	
+	int cnt = 0;
 
-int main() {
-	double* dp[100];
-	for (int i=0; i<100; i++)
-		dp[i] = &(Y[i][1]);
-
-
-    // I really learnt this idea from githuby
-	while(scanf("%d %d", &K, &N) > 0) {
-		if (K==0) {
-			printf("%f\n", 100.0);
-			continue;
+	while (B > A)
+	{
+		// cout << "A: " << A << " B: " << B << endl;
+		cnt++;
+		if (B%10 == 1)		// if B has the end number of 1  (ex) 81 becomes 8
+		{
+			B = B/10;
 		}
-
-
-		for (int i=0; i<=K; i++) dp[0][i] = 1;
-
-        // Get it to zero
-		dp[0][-1] = dp[0][K+1] = 0;
-
-		for (int i=1; i<N; i++) {
-			for (int j=0; j<=K; j++) dp[i][j] = dp[i-1][j-1] + dp[i-1][j] + dp[i-1][j+1];
-			dp[i][-1] = dp[i][K+1] = 0;
+		else if (B%2 == 0)	// otherwise, it has to be divisible by 2
+		{
+			B = B/2;
 		}
-
-		double curr = 0;
-		for (int i=0; i<=K; i++)
-			curr += dp[N-1][i];
-
-		double toDivide = pow(K+1, N);
-
-		printf("%.12f\n", 100.0*curr/toDivide);
+		else				// imagine starting with 266, then 133, and A is not 133, cannot make it
+		{
+			cout << -1;
+			return 0;
+		}
 	}
 
-    return 0;
+	if (A == B)
+	{
+		cout << cnt+1;
+	}
+	else
+	{
+		cout << -1;
+	}
 }
-

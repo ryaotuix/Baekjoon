@@ -19,10 +19,8 @@ typedef pair<Node *, Node *> edge;
 int getInd(char c);                                             // ex) Node name 'A' would return an index 1
 void nodeInfo(Node * n);                                        // ex) "Node name 'A' has DFS num : 1 & DFS fin num : 16"
 
-bool compareNode(const Node * a, const Node * b)
-{
-    return a->name < b->name;
-}
+bool compareNode(const Node * a, const Node * b)                // bool to sort by lexiographical order
+    {return a->name < b->name;}
 
 class Graph
 {
@@ -32,7 +30,8 @@ class Graph
         vector<Node *> nodes;                                   // Node vector of this graph
         vector<bool> visited;                                   // visited array
         int dfsCNT = 0;                                         // DFS Count for DfsNum and DfsFinNum
-        vector<edge> treeEdges;
+        vector<edge> treeEdges;                                 // collection of tree Edges
+        bool transposed = false;                                // true if transposed
 
         // Constructor
         Graph(string filename, bool transpose);
@@ -49,9 +48,10 @@ class Graph
         bool isCrossEdge(const Node * u, const Node * v);
         bool isForwardEdge(const Node * u, const Node * v);
         void edgeInfo(char uName, char vName);
+        void sortByFinNum();                                    // Sort Nodes by decreasing Dfs Fin Num
 
         // DO-ABLE
-        void getSTCC();                                         // get Strongly Connected Components in a directed Graph in O(n+m) time 
+        void getSTCC(Graph & transposed);                       // get Strongly Connected Components in a directed Graph in O(n+m) time 
         bool bipartite();                                       // decide if it is bipartite
         bool isCyclic();                                        // decide if there is a cycle
         bool isEulerCycle();                                    // decide if it is Euler Cycle (can visit all nodes without visiting again)
@@ -76,7 +76,7 @@ Graph::Graph(string filename, bool transpose)
         return;
     }
 
-                                                                // if f.is_open()
+    if (transpose) this->transpose = true;                                                           
 
     int nodeNum, edgeNum;
     f >> nodeNum >> edgeNum;                                    // read from the file and store information
@@ -99,7 +99,7 @@ Graph::Graph(string filename, bool transpose)
     
 
     char from, to;
-    while(f >> from >> to)  // read until the file ends hehehe
+    while(f >> from >> to)                                     // read until the file ends hehehe
     {   
         if (transpose)
         {
@@ -153,6 +153,8 @@ void Graph::dfs(char startNodeName)
         {
             char adjName = sNode->adj[i]->name;                     // each name of adj node
             int adjInd = getInd(adjName);                           // each index of adj node 
+            Node * currAdjNode = getNode(adjName);                  // current adjacent Node
+
             if (this->visited[adjInd] == false)                     // recursively call dfs if it is not visited
             {
                 edge tempEdge = make_pair(sNode, getNode(adjName));
@@ -160,6 +162,10 @@ void Graph::dfs(char startNodeName)
                 dfs(adjName);   
             }    
             
+            if (this->transpose == true)                            // if transposed, print STCC info
+            {
+                cout << currAdjNode->name << " ";
+            }
              
         }
 
@@ -276,6 +282,28 @@ Node * Graph::getNode(char name)
     return this->nodes[ind];
 }
 
+void Graph::sortByFinNum()
+{
+    sort(this->nodes.begin(), this->nodes.end(), [](const Node * a, const Node * b) -> bool
+    {
+        return a->dfsFinNum > b->dfsFinNum;
+    });
+}
+
+void Graph::getSTCC(Graph & transposed)
+{
+    this->sortByFinNum();                                   // Sort Nodes by decreasing DFS Fin Num
+
+    // Call DFS on G Transposed, in order of decreasing DFS Fin Num
+    int i = 1;
+    for (auto node : this->nodes)
+    {
+        char name = node->name;
+        int ind = getInd(name);
+        if (this->visited[ind])
+    }                                              
+}
+
 int getInd(char c) {
     if (c >= 65 && c <= 90) return c-'A'; 
     return -1;   
@@ -301,8 +329,8 @@ void nodeInfo(Node * n)
 int main()
 {
     string filename = "nodesInput.txt";
-    bool transpose = false;
-    Graph g(filename, transpose);
+    bool transpose = true;
+    Graph g(filename, !transpose);
 
     g.dfsALL('A');
     g.graphInfo();
@@ -316,6 +344,12 @@ int main()
     g.edgeInfo('H', 'G');
     // Back Edge example (E, F))
     g.edgeInfo('E', 'F');
+
+    g.sortByFinNum();                       // now sorted by decreasing DFS Fin Num
+    cout << "------------------------------------------------------------\n" << endl;
+    g.graphInfo();
     
+    Graph gT(filename, transpose);
+
 
 }
