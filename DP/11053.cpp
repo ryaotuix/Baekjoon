@@ -2,25 +2,49 @@
 
 using namespace std;
 
-int arr[1000 + 1];
-int dp[1000 + 1];
-multimap<int, int> mp; // key: arr[i]   value : i
-typedef pair<int, int> pii;
-int max = 0;
+vector<int> v = {2,3,6,8,10,13};
+
+void printVec()
+{
+    for (auto i : v)
+        cout << i << " ";
+    cout << endl;
+}
+
+// Binary Search the smallest number that is bigger than or equal to Target
+int findSB(int target, int lo, int hi)
+{
+    int i = 1;
+    int mid = lo + (hi-lo)/2;
+
+    cout << "[" << i++ << "]" << ": " << lo << " " << mid << " " << hi << endl;
+
+    while(lo+1 < hi)
+    {
+        mid = lo + (hi-lo)/2;
+        
+        if (v[mid] >= target)
+        {
+            hi = mid;
+        }
+        else
+        {
+            lo = mid;
+        }
+        cout << "[" << i++ << "]" << ": " << lo << " " << lo + (hi-lo)/2 << " " << hi << endl;
+
+    }
+    
+    cout << v[hi];
+}
 
 int main()
 {
-    ios::sync_with_stdio(false);
+    ios_base::sync_with_stdio(false);
     cin.tie(0);
+    printVec();
 
-    int len; cin >> len;
-
-    for (int i = 1; i < len + 1; i++)
-    {
-        int arr_i; cin >> arr_i;
-        mp.insert(pii(i, arr_i));       // have a map where key : arr[i]    value : i
-        
-    }
-    
-    
+    int lo = 0; int hi = v.size()-1;
+    int target = 14;
+    cout << findSB(target, lo, hi);
 }
