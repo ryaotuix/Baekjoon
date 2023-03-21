@@ -54,7 +54,7 @@ class Graph
         void getSTCC(Graph & transposed);                       // get Strongly Connected Components in a directed Graph in O(n+m) time 
         bool isBipartite();                                     // decide if it is bipartite
         bool isCyclic();                                        // decide if there is a cycle
-        bool isEulerCycle();                                    // decide if it is an Euler Cycle (can visit all nodes without visiting again)
+        bool isEulerCycle();                                    // decide if it is an  Euler Cycle (can visit all nodes without visiting again)
         
         // DIFFICULT
         vector<Node *> findEulerianTrail();                     // find the Eulerian trail                        

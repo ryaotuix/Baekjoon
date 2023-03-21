@@ -171,7 +171,7 @@ public:
     if (root == NULL)
         return root;
  
-    // Other Base Cases
+    // Other Cases
     if (root->key > k) {
         root->left = deleteNode(root->left, k);
         return root;
@@ -215,11 +215,11 @@ public:
         // If there is no succ, then assign
         // succ->right to succParent->right
         if (succParent != root)
-            succParent->left = succ->right;
+            succParent->left = succ->right;             // guaranteed that succcessor would not have left child (since it is a minimum)
         else
             succParent->right = succ->right;
  
-        // Copy Successor Data to root
+        // Instead of switching with successor, merely copy the data
         root->key = succ->key;
  
         // Delete Successor and return root
