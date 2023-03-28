@@ -112,3 +112,6 @@ int main()
     cout << isSameTree(p, q);
 
 }
+
+
+recursion answer could be done
