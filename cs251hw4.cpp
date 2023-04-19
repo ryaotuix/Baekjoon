@@ -10,7 +10,7 @@ typedef struct Node {
     bool isRed;
 }Node;
 
-typedef pair<int, int> directedEdge; // <weight, ind of Node Towards>
+typedef pair<int, int> directedEdge; // <ind of Node Towards, weight>
 
 // hashmap to change Node name to node array index
 unordered_map<char, int> toInd = {
@@ -188,16 +188,16 @@ void bfs(Node & startNode, vector<vector<int>> & adj)
 /* DIJKSRA */
 
 vector<vector<directedEdge>> weightedAdjList = {                                    // From
-    {make_pair(9, toInd['d'])},                                                     // a
-    {make_pair(7, toInd['c'])},                                                     // b
-    {make_pair(15, toInd['f'])},                                                    // c
-    {make_pair(12, toInd['e'])},                                                    // d
-    {make_pair(4, toInd['g']), make_pair(4, toInd['i'])},                           // e
-    {make_pair(8, toInd['h'])},                                                     // f
-    {make_pair(6, toInd['t'])},                                                     // g
-    {make_pair(10, toInd['t'])},                                                    // h
-    {make_pair(3, toInd['t'])},                                                     // i
-    {make_pair(5, toInd['a']), make_pair(6, toInd['b']), make_pair(27, toInd['e'])},// s
+    {make_pair(toInd['d'], 9)},                                                     // a
+    {make_pair(toInd['c'], 7)},                                                     // b
+    {make_pair(toInd['f'], 15)},                                                    // c
+    {make_pair(toInd['e'], 12)},                                                    // d
+    {make_pair(toInd['g'], 4), make_pair(toInd['i'], 4)},                           // e
+    {make_pair(toInd['h'], 8)},                                                     // f
+    {make_pair(toInd['t'], 6)},                                                     // g
+    {make_pair(toInd['t'], 10)},                                                    // h
+    {make_pair(toInd['t'], 3)},                                                     // i
+    {make_pair(toInd['a'], 5), make_pair(toInd['b'], 6), make_pair(toInd['e'], 27)},// s
     {}                                                                              // t
 };
 

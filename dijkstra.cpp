@@ -14,7 +14,7 @@ int d[100001]; // 최단 거리 테이블 만들기
 
 void dijkstra(int start)
 {
-    priority_queue<pair<int,int>>pq; // 거리, 노드 인덱스
+    priority_queue<pair<int,int>>pq; //  노드 인덱스, 거리
     
     pq.push({0,start}); //시작 노드로 가기위한 최단 경로는 0으로 설정하여, 큐에 삽입.
     d[start]=0;
@@ -37,6 +37,8 @@ void dijkstra(int start)
         {
             int cost = dist+graph[now][i].second; // 거쳐서 가는 노드의 비용을 계산
             cout << "node " << graph[now][i].first << " has the current cost of " << d[graph[now][i].first] << "\n";
+            cout << "node " << graph[now][i].first << " has the potential cost of " << cost << "\n";
+
                                                   // 현재노드까지 비용 + 다음 노드 비용
             if(cost<d[graph[now][i].first]) // 비용이 더 작다면 최단경로 테이블 값을 갱신.
             {
@@ -64,7 +66,7 @@ int main()
     graph[0].push_back({1, 6});
     graph[0].push_back({2, 4});
     graph[0].push_back({3, 2});
-    graph[1].push_back({2, 8});
+    graph[1].push_back({2, -8});
     graph[2].push_back({3, 3});
     dijkstra(start);
 
