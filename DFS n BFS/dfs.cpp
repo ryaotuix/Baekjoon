@@ -6,6 +6,7 @@
 
 using namespace std;
 
+// Node STRUCT
 typedef struct Node {
     char name = '0';
     int dfsNum = 0;                                             // DFS number
@@ -15,12 +16,30 @@ typedef struct Node {
 
 typedef pair<Node *, Node *> edge;
 
+int getInd(char c) {                                            // ex) Node name 'A' would return an index 1
+    if (c >= 65 && c <= 90) return c-'A'; 
+    return -1;   
+}            
 
-int getInd(char c);                                             // ex) Node name 'A' would return an index 1
-void nodeInfo(Node * n);                                        // ex) "Node name 'A' has DFS num : 1 & DFS fin num : 16"
+void nodeInfo(Node * n)                                         // ex) "Node name 'A' has DFS num : 1 & DFS fin num : 16"
+{
+    cout << "Node name ' " << n->name << " ' has DFS num : " << n->dfsNum << " & DFS fin num : " << n->dfsFinNum << endl;
+    if (n->adj.size() == 0)  cout << "No adjacent nodes\n";
+    else 
+    {
+        cout << "Adjacent Nodes : {";
+        for (int i = 0; i < n->adj.size(); i++) 
+        {
+            cout << n->adj[i]->name;
+            if (i != n->adj.size() - 1) cout << ", ";
+        } 
+        cout << "}\n";
+    }
+}
 
 bool compareNode(const Node * a, const Node * b)                // bool to sort by lexiographical order
     {return a->name < b->name;}
+
 
 class Graph
 {
@@ -29,7 +48,6 @@ class Graph
         int numNodes;   
         vector<Node *> nodes;                                   // Node vector of this graph
         vector<bool> visited;                                   // visited array
-        int dfsCNT = 0;                                         // DFS Count for DfsNum and DfsFinNum
         vector<edge> treeEdges;                                 // collection of tree Edges
         bool transposed = false;                                // true if transposed
 
@@ -37,7 +55,7 @@ class Graph
         Graph(string filename, bool transpose);
 
         // Method
-        void dfs(char startNodeName);                           // traverse the graph once from the given node
+        void dfs(char startNodeName, int & dfsNum);             // traverse the graph once from the given node
         void dfsALL(char starNodeName);                         // traverse the entire graph from the beginning       
         void graphInfo();                                       // print graph Info 
         Node * getNode(char nodeName);                          // get node 
@@ -58,9 +76,6 @@ class Graph
         
         // DIFFICULT
         vector<Node *> findEulerianTrail();                     // find the Eulerian trail                        
-
-
-
 };
 
 // CONSTRUCTOR READ FROM A TXT FILE
@@ -76,12 +91,12 @@ Graph::Graph(string filename, bool transpose)
         return;
     }
 
-    if (transpose) this->transpose = true;                                                           
+    if (transpose) this->transposed = true;                                                           
 
     int nodeNum, edgeNum;
     f >> nodeNum >> edgeNum;                                    // read from the file and store information
 
-    for (int i = 0; i < nodeNum; ++i)                           // fill out the vecotr nodes
+    for (int i = 0; i < nodeNum; ++i)                           // fill out the vector nodes
     {
                                                                 // create a Node "A, B, C, ..."
         Node * tempNode = new Node;
@@ -89,10 +104,10 @@ Graph::Graph(string filename, bool transpose)
         tempNode->dfsNum = 0;
         tempNode->dfsFinNum = 0;
         
-        this->nodes.push_back(tempNode);                        // add to a vector
-        this->visited.push_back(false);                         // defaut visited vector = false
-        
+        this->nodes.push_back(tempNode);                        // add to nodes vector
     }
+
+    this->visited = vector<bool>(nodeNum, false);               // defaut visited vector = false
 
     
     //for (int i = 0; i < this->nodes.size(); ++i)    nodeInfo(this->nodes[i]);
@@ -101,39 +116,33 @@ Graph::Graph(string filename, bool transpose)
     char from, to;
     while(f >> from >> to)                                     // read until the file ends hehehe
     {   
-        if (transpose)
+        if (transpose)                                         // if transposed, switch from and to
         {
             char temp = to;
             to = from;
             from = temp;
         }
 
-        // cout << from << " " << to << "\n";
-
         int fIndex = getInd(from);                              // index to use for adj    ex) index of 'A' is 0
         int tIndex = getInd(to);
-        // cout << fIndex << " " << tIndex << endl;
 
         Node * fNode = getNode(from);
         Node * tNode = getNode(to);
-     
         fNode->adj.push_back(tNode);
     }
     
-     // for (int i = 0; i < this->nodes.size(); ++i)   nodeInfo(this->nodes[i]); 
-
     // To recursively traverse lexiographically, we must sort the adj nodes
     for (int i = 0; i < this->nodes.size(); ++i)
     {
         Node * curr = this->nodes[i];
         sort(curr->adj.begin(), curr->adj.end(), compareNode);
     }   
-
 }
 
+int dfsCNT = 0;                                         // DFS Count for dfsCNT and DfsFinNum
 
 // DFS traverse!
-void Graph::dfs(char startNodeName)
+void Graph::dfs(char startNodeName, int & dfsCNT)
 {
     int index = getInd(startNodeName);
     Node * sNode = getNode(startNodeName);
@@ -141,12 +150,12 @@ void Graph::dfs(char startNodeName)
     // DFS only when it is not visited
     if (this->visited[index] == false)
     {
-        // i) this node is visited
+        // i) mark node visited
         this->visited[index] = true;
 
         // ii) this node's DFS num
-        this->dfsCNT = this->dfsCNT + 1;
-        sNode->dfsNum = this->dfsCNT;
+        sNode->dfsNum = dfsCNT++;
+    
 
         // iii) recursively call dfs
         for (int i = 0; i < sNode->adj.size(); i++)
@@ -159,27 +168,29 @@ void Graph::dfs(char startNodeName)
             {
                 edge tempEdge = make_pair(sNode, getNode(adjName));
                 treeEdges.push_back(tempEdge);
-                dfs(adjName);   
+                dfs(adjName, dfsCNT);   
             }    
             
-            if (this->transpose == true)                            // if transposed, print STCC info
+            if (this->transposed == true)                            // if transposed, print STCC info
             {
                 cout << currAdjNode->name << " ";
             }
-             
         }
 
         // iv) this node's DFS Fin Num 
-        this->dfsCNT = this->dfsCNT + 1;
-        sNode->dfsFinNum = this->dfsCNT;
+        sNode->dfsFinNum = dfsCNT++;
     }
 
 }
 
 void Graph::dfsALL(char startNodeName) {
-    dfs(startNodeName);
+    int dfscnt = 0;
+    dfs(startNodeName, dfscnt);
     for (auto curr : this->nodes)
-        this->dfs(curr->name);
+    {
+        dfscnt = 0;
+        this->dfs(curr->name, dfscnt);
+    }
 }
 
 // EDGE GOING FROM U TO V (u,v)
@@ -256,7 +267,6 @@ void Graph::edgeInfo(char uName, char vName)
     else if (BE) cout << uName << " -> " << vName << " is BackEdge\n";
     else if (CE) cout << uName << " -> " << vName << " is CrossEdge\n";
     else if (FE) cout << uName << " -> " << vName << " is ForwardEdge\n";
-   
 }
 
 
@@ -290,40 +300,22 @@ void Graph::sortByFinNum()
     });
 }
 
-void Graph::getSTCC(Graph & transposed)
-{
-    this->sortByFinNum();                                   // Sort Nodes by decreasing DFS Fin Num
+// void Graph::getSTCC(Graph & transposed)
+// {
+//     this->sortByFinNum();                                   // Sort Nodes by decreasing DFS Fin Num
 
-    // Call DFS on G Transposed, in order of decreasing DFS Fin Num
-    int i = 1;
-    for (auto node : this->nodes)
-    {
-        char name = node->name;
-        int ind = getInd(name);
-        if (this->visited[ind])
-    }                                              
-}
+//     // Call DFS on G Transposed, in order of decreasing DFS Fin Num
+//     int i = 1;
+//     for (auto node : this->nodes)
+//     {
+//         char name = node->name;
+//         int ind = getInd(name);
+//         if (this->visited[ind])
+//     }                                              
+// }
 
-int getInd(char c) {
-    if (c >= 65 && c <= 90) return c-'A'; 
-    return -1;   
-}
 
-void nodeInfo(Node * n)
-{
-    cout << "Node name ' " << n->name << " ' has DFS num : " << n->dfsNum << " & DFS fin num : " << n->dfsFinNum << endl;
-    if (n->adj.size() == 0)  cout << "No adjacent nodes\n";
-    else 
-    {
-        cout << "Adjacent Nodes : {";
-        for (int i = 0; i < n->adj.size(); i++) 
-        {
-            cout << n->adj[i]->name;
-            if (i != n->adj.size() - 1) cout << ", ";
-        } 
-        cout << "}\n";
-    }
-}
+
 
 
 int main()
@@ -333,6 +325,7 @@ int main()
     Graph g(filename, !transpose);
 
     g.dfsALL('A');
+    cout << endl;
     g.graphInfo();
 
     cout << endl;
