@@ -28,7 +28,6 @@ void insertionSort()
             else break;
         }
    }
-   
 }
 
 void printArr()
