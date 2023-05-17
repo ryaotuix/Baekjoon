@@ -12,11 +12,6 @@ direction <col, row>
 4. up = <0, 1>
 */
 
-direction right = {1, 0};
-direction down = {0, 1};
-direction left = {-1, 0};
-direction up = {0, 1};
-
 bool compareDirection(direction a, direction b)
 {
     if (a.first == b. first && a.second == b.second)
@@ -25,8 +20,9 @@ bool compareDirection(direction a, direction b)
     return false;
 }
 
-void print(const int n)
+void printGrid(int n)
 {
+    cout << "comes";
     // init nxn grid
     int ** grid = new int * [n];
     for (int i = 0; i < n; i++)
@@ -34,15 +30,24 @@ void print(const int n)
 
     // I believe in C++, arr is init as 0
 
+    cout << "here";
     // Fill out the grid
     int cnt = 1;
     int leftBoundary = 0;
     int rightBoundary = n-1;
     int downBoundary = n-1;
-    int upBoundary = 0;
-    direction d = right;
+    int upBoundary = 0 + 1;
 
+    // Question! 왜 이걸 밖에 두면 안되나요?
+    direction right = {1, 0};
+    direction down = {0, 1};
+    direction left = {-1, 0};
+    direction up = {0, 1};
+
+    direction d = right;
     int col = 0; int row = 0;
+
+    cout << "before the loop";
     while (leftBoundary != rightBoundary || downBoundary != upBoundary)
     {
         grid[col][row] = cnt++;
@@ -75,13 +80,15 @@ void print(const int n)
 
     }
 
+    cout << "after the loop";
 
-
+    
     // print
     for (int i = 0; i < n; i++)
     {
         for (int j = 0; j < n; j++)
         {
+            grid[i][j] = cnt++;
             cout << grid[i][j] << " ";
         }
         cout << endl;
@@ -91,12 +98,9 @@ void print(const int n)
 
 int main()
 {
-    ios_base::sync_with_stdio(false);
-    cin.tie(0);
-
     int n;
     cin >> n;
 
-    print(n);
+    printGrid(n);
 }
 
