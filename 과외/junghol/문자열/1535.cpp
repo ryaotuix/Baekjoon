@@ -3,19 +3,23 @@
 using namespace std;
 
 string dictionary [1010];
-char word[105];
+
+void parseStringAndPrint(string &line)
+{
+    char delim = ' ';
+    stringstream ss(line);
+
+    
+}
 
 int main()
 {
     string line;
-    
 
     while (true)
     {
-        string delimiter = " ";
+        getline(cin, line);
 
-        string token;
-        
         if (line == "END")
             return 0;
 

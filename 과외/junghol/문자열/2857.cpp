@@ -2,16 +2,16 @@
 
 char grid [5][15 + 5];
 
-void init()
-{
-    for (int i = 0; i < 5; i++)
-    {
-        for (int j = 0; j < 20; j++)
-        {
-            grid[i][j] = '.';
-        }
-    }
-}
+// void init()
+// {
+//     for (int i = 0; i < 5; i++)
+//     {
+//         for (int j = 0; j < 20; j++)
+//         {
+//             grid[i][j] = '.';
+//         }
+//     }
+// }
 
 void printVertical()
 {
@@ -19,19 +19,20 @@ void printVertical()
     {
         for (int j = 0; j < 5; j++)
         {
-            if (grid[j][i] != '.')
+            if (grid[j][i] != '\0')
                 printf("%c", grid[j][i]);
         }
     }
 }
+
 int main()
 {
-    init();
+    // init();
 
     // input 
     for (int i = 0; i < 5; i++)
     {
-        scanf("%s", grid[i]);
+        scanf(" %s", grid[i]);
     }
 
     printVertical();
