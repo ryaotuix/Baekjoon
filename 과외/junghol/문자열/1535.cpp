@@ -7,9 +7,8 @@ string dictionary [1010];
 void parseStringAndPrint(string &line)
 {
     char delim = ' ';
-    stringstream ss(line);
+    string s;
 
-    
 }
 
 int main()
