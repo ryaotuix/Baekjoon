@@ -2,7 +2,7 @@
 
 using namespace std;
 
-int n, m;
+int n, m;       // n : number of rolls,     m : sum 
 
 int arr[8+2];   //  array to store each roll's number
 
@@ -19,7 +19,7 @@ void fill(int ind, int sum)
     // case 3 : when you made it
     if (sum == 0)
     {
-        for (int i = n; i >= 0; i--)
+        for (int i = n; i >= 1; i--)
         {
             cout << arr[i] << " ";
         }

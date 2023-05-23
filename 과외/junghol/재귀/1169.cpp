@@ -118,8 +118,8 @@ int main() {
     if (m == 1)
         printRec(1);
     else if (m == 2)
-        printRec(2);
+        printRec2(1);
     else if (m == 3)
-        printRec(3);
+        printRec3(1);
 
 }
