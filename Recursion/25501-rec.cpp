@@ -6,19 +6,19 @@
 using namespace std;
 
 int rectime = 0;
-char word[1001];
+string word;
 
-int recursion(const char *s, int l, int r){
+int recursion(string & word, int l, int r){
     rectime++;
     if(l >= r) return 1;
-    else if(s[l] != s[r]) return 0;
+    else if(word[l] != word[r]) return 0;
     else {
-        return recursion(s, l+1, r-1);
+        return recursion(word, l+1, r-1);
     }
 }
 
-int isPalindrome(const char *s){
-    return recursion(s, 0, strlen(s)-1);
+int isPalindrome(string & word){
+    return recursion(word, 0, word.length()-1);
 }
 
 
