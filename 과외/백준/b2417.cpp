@@ -21,15 +21,23 @@ ll n;      // target
     4. mid*mid can go over long long therefore, need to take an action
 */
 
+
+const ll maxSqrtll = 3037000500;
+
+
+
+    // lo + 1 < hi        사용
 ll binarySearchSqrt()
 {
     ll lo = 0 - 1;     // min - 1
     ll hi = n;
     ll mid;
 
-    while (lo <= hi)
+    while (lo + 1 < hi)
     {
-        mid = lo + (hi - lo) / 2;
+        mid = (lo + hi) / 2;
+
+        // cout << lo << " " << hi << " " << mid << endl;
 
         // if there is a remainder,
         // mid * mid >= target becomes
@@ -48,8 +56,36 @@ ll binarySearchSqrt()
             lo = mid;
     }
 
+    if (hi * hi >= n)
+        return hi;
+    else 
+        return hi+1;
+}
+
+
+/*
+    lo < hi 사용
+ll binarySearchSqrt()
+{
+    ll lo = 0;          // 범위 바꿈
+    ll hi = n;
+    ll mid;
+
+    while (lo < hi)
+    {
+        mid = (lo + hi) / 2;
+        if (mid * mid >= n || mid >= maxSqrtll)
+        {
+            hi = mid;
+        }
+        else // mid * mid < n
+            lo = mid + 1;               // 갱신 방법 바꿈
+    }
+
     return hi;
 }
+*/
+
 
 int main()
 {
@@ -57,8 +93,10 @@ int main()
     cin.tie(0);
     cout.tie(0);
 
-    cin >> n;
-    ll res = binarySearchSqrt();
+    int a = binarySearch();
 
-    cout << res;
+    // cin >> n;
+    // ll res = binarySearchSqrt();
+
+    // cout << res;
 }
