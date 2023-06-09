@@ -2,29 +2,31 @@
 
 using namespace std;
 
-int n, m;       // n is number of original wires, m : number of same length wires we want 
-int maximum = 0;
+typedef long long ll;
 
-int getWires(vector<int> & wires, int length)
+ll n, m;       // n is number of original wires, m : number of same length wires we want 
+ll maximum = 0;
+
+ll getWires(vector<ll> & wires, ll length)
 {
-    int sum = 0;
-    for (int wire : wires)
+    ll sum = 0;
+    for (ll wire : wires)
     {
         sum += wire / length;
     }
     return sum;
 }
 
-int binarySearch(vector<int> & wires)
+ll binarySearch(vector<ll> & wires)
 {
-    int lo = 0; 
-    int hi = maximum + 1;       // must be outside of range !
-    int mid;
+    ll lo = 0; 
+    ll hi = maximum + 1;       // must be outside of range !
+    ll mid;
 
     while (lo + 1 < hi)
     {
         mid = (lo + hi) / 2;
-        int numWires = getWires(wires, mid);    
+        ll numWires = getWires(wires, mid);    
 
         if (numWires >= m)      // if we have more wires, can we reduce number of wires by increasing the length?
         {
@@ -42,11 +44,11 @@ int binarySearch(vector<int> & wires)
 
 int main()
 {
-    int n; cin >> n >> m;
-    vector<int> wires (n);
-    for (int i = 0; i < n; i++)
+    ll n; cin >> n >> m;
+    vector<ll> wires (n);
+    for (ll i = 0; i < n; i++)
     {
-        int wire; cin >> wire;
+        ll wire; cin >> wire;
 
         if (wire > maximum)     // if new wire is greater than maximum, make that wire a new maximum length wire
             maximum = wire;
