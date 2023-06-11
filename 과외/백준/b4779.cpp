@@ -1,6 +1,8 @@
 #include<bits/stdc++.h>
 
 using namespace std;
+
+// print length amount of empty space
 void printEmpty(int len)
 {
     for (int i = 0; i < len; i++)
@@ -26,12 +28,10 @@ void printCantorSet(int n)
 
 int main()
 {
-   do
-   {
-        int n;
-        cin >> n;
+    int n;
+    while (scanf("%d", &n) != EOF)
+    {
         printCantorSet(n);
-        
-   } while (true);
-    
+        cout << endl;
+    }
 }

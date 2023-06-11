@@ -9,7 +9,7 @@ typedef long long ll;
 int main()
 {
     cin >> n;
-    vector<int> v(n);
+    vector<ll> v(n);
     for (int i = 0; i < n; i++)
         cin >> v[i];
 
