@@ -2,78 +2,76 @@
 
 using namespace std;
 
-int n;                  // number of houses
-int routers;            // number of routers
+typedef long long ll;
 
+int n, wifi;        // number of houses, number of wifi we need
+ll minimum = 1e9 + 1;
+ll maximum = -1;
 
-// O(n)
-// function to get the number of routers we need with the current power
-int getRouter(vector<int> & houses, int currPower)
+// Function to get number of wifi we need with the given distance
+int getWifi(vector<ll> & houses, ll dist)
 {
-    int cnt = 1;
-    int effective = houses[0] + currPower;      // effective range starting at fist house
+    int wifiNum = 1;
+    ll temp = houses[0] + dist;     // According to the first house, stores the maximum loc that the current wifi can reach
 
-    for (int house : houses)
+    for (int loc : houses)
     {
-        if (house >= effective)                  // when this house is outside of the effective range
+        if (loc >= temp)
         {
-            cnt++;                              // we need another router  
-            effective = house + currPower;  // update the effective range
+            wifiNum++;          // locate wifi in current location
+            temp = loc + dist;  // update new maximum location that this wifi can reach
         }
+        // cout << "loc : " << loc << " wifiNum : " << wifiNum << endl;
+
     }
-    return cnt;
+
+    return wifiNum;
 }
 
+// Binary Search the distances
+int findDistance(vector<ll> & houses)
+{
+    ll lo = 0;
+    ll hi = maximum - minimum + 3;
+    ll mid;
 
-int maxDist(vector<int> & houses, int power)
-{   
-    // potential power of routers
-    int minPow = 1;
-    int maxPow = power;
+    while (lo + 1 < hi)
+    {   
+        mid = (lo + hi) / 2;        // mid is current distance
+        int numWifi = getWifi(houses, mid);     // get number of wifi we have with current distance
 
-    int ans = 0;
+        // cout << lo << " " << hi << " " << mid << " " << numWifi << endl;
 
-    while (minPow < maxPow)
-    {
-        int currPow = (minPow + maxPow) / 2;
-        int numRouter = getRouter(houses, currPow);
-
-        cout << currPow << " " << numRouter << endl;
-
-        // if we need less router than given router, --> We can reduce router power
-        if (numRouter < routers)
-        {
-            maxPow = currPow;
-        }
-        // if we need more router than the given router, --> We can increase router power
+        if (numWifi >= wifi)        // Too many wifi? Reduce Increase distance
+            lo = mid;
         else
-        {
-            minPow = currPow + 1;
-            ans = max(ans, currPow);
-        }
-    }
-
-    return ans;
-}
+            hi = mid;
+    }   
+    return lo;
+}   
 
 int main()
 {
-    cin >> n >> routers;
-    vector<int> houses;             //  loc of houses
-
-    for (int i = 0; i < n; i++)
+    cin >> n >> wifi;
+    vector<ll> houses (n); // vector to store each house's location
+    for (int i = 0; i < n; i++)     // receive inputs, and update min and max locations of hosues according to them
     {
-        int temp; cin >> temp;
-        houses.push_back(temp);
+        ll loc; cin >> loc;
+        if (loc < minimum)
+            minimum = loc;
+        if (loc > maximum)
+            maximum = loc;
+        
+        houses[i] = loc;            // put it in a vector
     }
 
+
+    // ! MUST SORT THE HOUSES !
     sort(houses.begin(), houses.end());
 
-    for (int house : houses)
-        cout << house << " ";
-    cout << endl;
 
-    int power = maxDist(houses, houses[houses.size() - 1] - houses[0]);
+    // cout << getWifi(houses, dist);
+    
+    cout << findDistance(houses);
 
-    cout << power << endl;
 }
