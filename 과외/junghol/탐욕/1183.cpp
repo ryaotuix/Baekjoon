@@ -88,6 +88,7 @@ Idea:
 using namespace std;
 
 int target;
+int sum = 0;
 vector<int> coinValues = {500, 100, 50, 10, 5, 1};
 vector<int> coinNum(6);     // initial number of coins
 vector<int> coinSub(6);     // store number of coins to make total - target
@@ -95,30 +96,28 @@ vector<int> coinSub(6);     // store number of coins to make total - target
 
 int getTotal()
 {
-    int total = 0;  // total number of coins
+    int total = 0;
+    int remaining = sum - target;   // sum - target
 
-    int sum = 0;
-    for (int i = 0; i < coinValues.size(); i++)
+    for (int i = 0; i < 6; i++)
     {
-        sum += coinValues[i] * coinNum[i];
-    }
+        // if remaining becomes 0, it means we are done
+        if (remaining == 0)
+            break;
 
-    int remaining = target - sum;   // target - sum
-
-    int i = 0;
-    while(remaining >= 0 && i < coinValues.size())
-    {
-        if (remaining - coinValues[i] >= 0)
-        {
-            coinSub[i] = coinSub[i] + 1;
-            total++;
-            remaining -= coinValues[i];
-        }
-        else
-        {
-            i++;
-        }
+        // if we used all the coins or cannot use this coin because it exceeds
+        if (coinNum[i] == coinSub[i] || remaining - coinValues[i] < 0)
+            continue;
+        
+        // if we can use this number 
+        coinSub[i]++;
+        remaining -= coinValues[i];
+        
     }
+    
+    for (auto i : coinSub)
+        cout << i << " ";
+    cout << endl;
 
     return total;
 }
@@ -129,8 +128,9 @@ int main()
     for (int i = 0; i < 6; i++)
     {
         cin >> coinNum[i];
+        sum += coinNum[i] * coinValues[i];    
     }
-
+    // cout << "sum : " << sum << endl;
     // INPUT done
 
 
