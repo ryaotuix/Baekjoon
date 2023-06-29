@@ -3,11 +3,10 @@
 using namespace std;
 
 int sum;
-    vector<int> coins(6);
-    vector<int> coinVals = {500, 100, 50, 10, 5, 1};
+vector<int> coins(6);
+vector<int> coinVals = {500, 100, 50, 10, 5, 1};
 /* {500, 100, 50, 10, 5, 1} */
-
-    vector<int> ans(6); // answer
+vector<int> ans(6); // answer all filled with 0s
 
 
 int answer()
@@ -28,23 +27,29 @@ int answer()
         int j;
         for (j = coinNum; j >= 0; j--)
         {
+            // use maximum number of current coin if we can pay the rest with next coin value
             if ((sum - j*currCoinVal) % nextCoinVal == 0)
                 break;
         }
 
-        sum -= (j*currCoinVal);
-        total += j;
+        sum -= (j*currCoinVal);             // calculate sum 
+        total += j;                         // increment total
 
-        ans[i] = j;
+        ans[i] = j;                         // store how many coins we used
     }
 
-    if (sum == 0)
+    // The last case when
+    if (sum != 0)
+    {
+        ans[0] = sum / coinVals[0];
+        total += ans[0];   
         return total;
-
-    
-    ans[0] = sum / coinVals[0];
-    
-    return total;
+    }
+    else
+    {
+        ans[0] = 0;
+        return total;
+    }   
 }
 
 
@@ -59,6 +64,7 @@ int main()
 
 
     int total = answer();
+    cout << total << endl;
     for (int i = 0; i < ans.size(); i++)
     {
         cout << ans[i] << " ";
