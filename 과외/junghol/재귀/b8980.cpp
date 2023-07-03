@@ -1,91 +1,131 @@
-#include <bits/stdc++.h> 
+#include <bits/stdc++.h>
 
 using namespace std;
 
-/* Materials */
-typedef pair<int, int> pii;                                                    // <# loads, Town To>
-
-priority_queue< pii, vector<pii>, greater<pair<int,int>> > town[2000 + 5];     // arr of pq <town TO, # loads>         ind : town FROM
-int C;                                                                         // Capacity of the truck
-int truck;                                                                     // number of loads in truck
-priority_queue< pii, vector<pii>, greater<pair<int,int>> > currLoads;          // stores the information of current load in truck (pq by town TO)
-int N;                                                                         // # town
-
-void input()
+typedef struct load
 {
-    cin >> N >> C;
-    int m; cin >> m;
-    for (int i = 0; i < m; i++)
+    int from;
+    int to;
+    int amount;
+} load;
+
+/* Materials */
+vector<load> loads;
+int N;
+int C;
+int num;
+
+// comparator to sort load
+bool loadComp(const load &a, const load &b)
+{
+    if (a.from == b.from)
     {
-        int ind, townTo, load;
-        cin >> ind >> townTo >> load;
+        if (a.to == b.to)
+        {
+            return a.amount < b.amount; // '<' sorts in an ascending order
+        }
 
-        pii currPack = make_pair(load, townTo);
-
-        town[ind].push(currPack);
+        return a.to < b.to;
     }
-    // ordered by townTo number
+
+    return a.from < b.from;
 }
 
-void checkInput()
+struct byTo
 {
-    for (int i = 0; i < N; i++)
+    bool operator()(const load &a, const load &b)
     {
-        cout << "Index " << i << " : \n";
-        while (!town[i].empty())
-        {
-            pii currLoad = town[i].top();
-            town[i].pop();
-            cout << "<" << currLoad.second << " " << currLoad.first << ">" << endl;
-        }
+        return a.to > b.to;
     }
-}   
+};
 
-int getTotal()
+void
+input()
 {
-    int total = 0;
+    cin >> N >> C;
+    cin >> num;
+    for (int i = 0; i < num; i++)
+    {
+        int from, to, amount;
+        cin >> from >> to >> amount;
+        load curr = {from, to, amount};
+        loads.push_back(curr);
+    }
 
-    // iterate through Towns
-    for (int i = 1; i <= N; i++)
-    {  
-        // town has packages to unload and we have packages to unload here
-        while(!currLoads.empty() && currLoads.top().first == i)
+    sort(loads.begin(), loads.end(), loadComp);
+
+    cout << endl;
+    for (auto i : loads)
+    {
+        cout << i.from << " " << i.to << " " << i.amount << endl;
+    }
+}
+
+void printLoad(load l)
+{
+    cout << "From : " << l.from << " To : " << l.to << " Amount : " <<  l.amount << endl;
+}
+
+int getAmont()
+{
+    int res = 0;
+    int truck = 0; // current load
+
+    // sorted by the town to send
+    priority_queue<load, vector<load>, byTo> pq; // contain current load on truck
+
+    int i = 0; // ptr at load vectors
+
+    for (int town = 0; town <= N; town++)
+    {
+       
+        // (I) get out of the truck first
+        // if not empty and there is a load to this town
+        while (!pq.empty() && pq.top().to == town)
         {
-            int unload = currLoads.top().second;                 
-            cout << "UNLOAD: In town " << i << ": " << "unload amount" << unload << endl;
-            total += unload;                                    // unload and increase total
-            truck -= unload;
-            currLoads.pop();
+            cout << "Unloading" << endl;
+            printLoad(pq.top());
+
+            res += pq.top().amount;   // carried this successfully
+            truck -= pq.top().amount; // unload it from truck (remove weight and pop)
+            pq.pop();
         }
 
-        // town has a package to deliver, Saved in TOWN
-        while(!town[i].empty() && truck < C)
+        cout << endl;
+        // (II) load the truck
+        while (i < loads.size() && loads[i].from == town)
         {
+            cout << "Loadng \n";
+            // if truck does not have capacity, we can't load from this town
+            if (truck == C)
+            {
+                i++;
+                continue;
+            }
             
-            int townTo = town[i].top().second;
-            int amount = town[i].top().first;
-            // i.e. if we can load 7 more but found amount is 10, -> load amount 7 
-            amount = (amount > C - truck) ? C - truck : amount;
+            // if truck has capacity
+            // i.e. we have the amount of 60 but truck has 20 spaces left
+            loads[i].amount = (C - truck < loads[i].amount) ? C - truck : loads[i].amount;
 
-            cout << "LOAD: In town " << i << ": " << "with current amount " << truck << " load " << amount << " to " << townTo << endl;
-            town[i].pop();
-           
-            // update amount on truck, and curr load we are carrying
-            truck += amount;
-            currLoads.push({townTo, amount});
+            // add it to truck
+            truck += loads[i].amount;
+            pq.push(loads[i]);
+            
+            cout << "just loaded ";
+            printLoad(loads[i]);
+            i++;
+            
         }
+
+        cout << endl;
         cout << endl;
     }
 
-    // cout << total;
-    return total;
+    return res;
 }
 
 int main()
 {
     input();
-    cout << getTotal();
-
-    
-
+    cout << getAmont();
 }
