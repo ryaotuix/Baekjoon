@@ -14,21 +14,20 @@ const ll divi = 1e9 + 7;
 
     Base Case : if a^(b/2) is less than maxInt (sqrt divi)
 */
+// Function to calculate modular exponentiation (base^exponent) % modulus
+int modularExponentiation(int base, int exponent, int modulus) {
+    if (modulus == 1)
+        return 0;
 
-unsigned long long calculateModulo(unsigned long long a, unsigned long long b, unsigned long long n) {
-    unsigned long long result = 1;
+    int result = 1;
+    base = base % modulus;
 
-    // Perform modular exponentiation
-    a = a % n;
-    while (b > 0) {
-        // If b is odd, multiply result with a and take modulo n
-        if (b & 1) {
-            result = (result * a) % n;
-        }
+    while (exponent > 0) {
+        if (exponent % 2 == 1)
+            result = (result * base) % modulus;
 
-        // b must be even now
-        b = b >> 1; // Divide b by 2
-        a = (a * a) % n;
+        exponent = exponent >> 1;
+        base = (base * base) % modulus;
     }
 
     return result;
@@ -37,5 +36,10 @@ unsigned long long calculateModulo(unsigned long long a, unsigned long long b, u
 
 int main()
 {
-
+    ll a = 1e9;
+    ll b = 1e9;
+    ll n = 13;
+    ll result = modularExponentiation(a, b, n);
+    cout << "\n\n";
+    cout << result;
 }
