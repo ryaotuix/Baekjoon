@@ -53,7 +53,9 @@
         "xloctime": "cpp",
         "xtree": "cpp",
         "fstream": "cpp",
-        "unordered_map": "cpp"
+        "unordered_map": "cpp",
+        "list": "cpp",
+        "xhash": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }
