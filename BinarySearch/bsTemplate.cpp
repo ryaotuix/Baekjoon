@@ -3,20 +3,14 @@
 using namespace std;
 
 
-vector<int> v1 = {1,3,6,6,6,8};
-vector<int> v2 = {1,4,8,9};
-
-
-// upper_bound : > target
-// Goal : bs1(6, v1) = 2
-// Goal : bs1(6, v2) = 2
-int bisectLeft(int target, vector<int> & v)
+// Always get the first index of the target
+int lowerBound(vector<int> & v, int target)
 {
-    int lo = 0; int hi = v.size() - 1;
-
+    int lo = 0;
+    int hi = v.size() - 1;
     while (lo < hi)
     {
-        int mid = (lo + hi) / 2;
+        int mid = lo + (hi - lo) / 2;
         int curr = v[mid];
 
         if (curr < target)
@@ -24,36 +18,49 @@ int bisectLeft(int target, vector<int> & v)
         else
             hi = mid;
     }
+
     return lo;
 }
 
-
-// Goal : bs2(6, v1) = 5
-// Goal : bs2(6, v2) = 2
-int bisectRight(int target, vector<int> & v)
+// Always get the first index of the target
+int upperBound(vector<int> & v, int target)
 {
-    int lo = 0; int hi = v.size() - 1;
-
+    int lo = 0;
+    int hi = v.size() - 1;
     while (lo < hi)
     {
-        int mid = (lo + hi) / 2;
+        int mid = lo + (hi - lo) / 2;
         int curr = v[mid];
 
-        if (curr > target)
-            hi = mid;
-        else
+        if (curr <= target)
             lo = mid + 1;
+        else
+            hi = mid;
     }
+
     return lo;
 }
 
 
 int main()
 {
-    cout << bisectLeft(6, v1) << endl;
-    cout << bisectLeft(6, v2) << endl;
+    vector<int> arr = {5,7,7,8,8,10};
+    vector<int> arr2 = {5,7,9,10};
+    int target = 8;
 
-    cout << bisectRight(6, v1) << endl;
-    cout << bisectRight(6, v2) << endl;
-    return 0;
+    cout << lowerBound(arr, 8) << endl;
+    cout << lowerBound(arr2, 8) << endl;
+
+    cout << upperBound(arr, 8) << endl;
+    cout << upperBound(arr2, 8) << endl;
+
+    // Expected 3, 2, 5, 2
+
+    cout << "=============================\n";
+
+    vector<int> arr3 = {2, 2};
+    cout << lowerBound(arr3, 2) << endl;
+    cout << upperBound(arr3, 2) << endl;
+    
+    // Expected 0, 1
 }
