@@ -63,4 +63,12 @@ int main()
     cout << upperBound(arr3, 2) << endl;
     
     // Expected 0, 1
+
+    cout << "Final : ";
+    vector<int> v = {1, 2, 3, 4, 7};
+    cout << upperBound(v, 3) << endl;
+
+    cout << lower_bound(v.begin(), v.end(), 4) - v.begin() << endl;
+    cout << upper_bound(v.begin(), v.end(), 4) - v.begin() << endl;
+
 }
