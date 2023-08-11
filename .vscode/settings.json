@@ -55,7 +55,11 @@
         "fstream": "cpp",
         "unordered_map": "cpp",
         "list": "cpp",
-        "xhash": "cpp"
+        "xhash": "cpp",
+        "functional": "cpp",
+        "random": "cpp",
+        "regex": "cpp",
+        "version": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }
