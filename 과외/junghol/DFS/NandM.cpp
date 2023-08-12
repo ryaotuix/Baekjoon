@@ -5,25 +5,22 @@ using namespace std;
 int n;
 int m;
 int arr[10];
-bool used[10];
 int ret[10];
+bool used[10] = {false, };
 
 void input()
 {
-    // while receiving input, check if it exist
     cin >> n >> m;
     for (int i = 0; i < n; i++)
-    {
         cin >> arr[i];
-    }
-
+    
     sort(arr, arr + n);
 }
 
-void dfs(int depth)
+void dfs(int depth, int start)
 {
     // base case:
-    if (depth == m)
+    if(depth == m)
     {
         for (int i = 0; i < m; i++)
             cout << ret[i] << " ";
@@ -32,22 +29,25 @@ void dfs(int depth)
     }
 
     int last = 0;
-    for (int i = 0; i < n; i++)
+    
+    for (int i = start; i < n; i++)
     {
-        // if not used and last is not the same as this number
+        // if this is not used and not same as last
         if (!used[i] && last != arr[i])
         {
             used[i] = true;
-            ret[depth] = arr[i];
             last = arr[i];
-            dfs(depth + 1);
+            ret[depth] = arr[i];
+            dfs(depth + 1, i + 1);
+
             used[i] = false;
         }
     }
 }
 
+
 int main()
 {
     input();
-    dfs(0);
+    dfs(0, 0);
 }
