@@ -127,5 +127,6 @@ void fillSudoku(int count)
 int main()
 {
     input();
+    cout << endl;
     fillSudoku(0);
 }
