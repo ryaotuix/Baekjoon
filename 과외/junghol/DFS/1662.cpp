@@ -1,135 +1,42 @@
-#include <bits/stdc++.h>
+#include<stdio.h>
 
-using namespace std;
+int n,inp[50][50],check[50],ans;
 
-int grid[10 + 5][10 + 5];
-int n;
-int cnt = 100 + 5;
-
-void input()
+void back(int a,int cnt)
 {
-    cin >> n;
-    for (int i = 1; i <= n; i++)
+    if(a==2*n)
     {
-        for (int j = 1; j <= n; j++)
-        {
-            cin >> grid[i][j];
-        }
+        if(cnt>ans) ans=cnt;
+        return;
     }
+    int r=a,c=1,f=0;
+    if(a>n) r=n,c+=(a-n);
+
+
+    for(;r>=1 && c<=n;r--,c++)
+    {
+        if(check[r-c+n] || inp[r][c]==0) continue;
+        check[r-c+n]=1; f=1;
+        back(a+1,cnt+1);
+        check[r-c+n]=0;
+    }
+    if(f==0) back(a+1,cnt);
 }
-
-// -1
-void place(int col, int row)
-{
-    int orgCol = col;
-    int orgRow = row;
-
-    // top left 
-    while (col >= 1 && row >= 1)
-    {
-        grid[col][row]++;
-        row--;
-        col--;
-    }
-    col = orgCol;  row = orgRow;
-
-    // top right
-    while (col <= n && row >= 1)
-    {
-        grid[col][row]++;
-        row--;
-        col++;
-    }
-    col = orgCol;  row = orgRow;
-
-    // bottom left
-    while (col >= 1 && row <= n)
-    {
-        grid[col][row]++;
-        row++;
-        col--;
-    }
-    col = orgCol;  row = orgRow;
-
-    // bottom right
-    while (col <= n && row <= n)
-    {
-        grid[col][row]++;
-        row++;
-        col++;
-    }
-
-    grid[orgCol][orgRow] -= 3;
-}
-
-// +1
-void release(int col, int row)
-{
-    int orgCol = col;
-    int orgRow = row;
-
-    // top left 
-    while (col >= 1 && row >= 1)
-    {
-        grid[col][row]--;
-        row--;
-        col--;
-    }
-    col = orgCol;  row = orgRow;
-
-    // top right
-    while (col <= n && row >= 1)
-    {
-        grid[col][row]--;
-        row--;
-        col++;
-    }
-    col = orgCol;  row = orgRow;
-
-    // bottom left
-    while (col >= 1 && row <= n)
-    {
-        grid[col][row]--;
-        row++;
-        col--;
-    }
-    col = orgCol;  row = orgRow;
-
-    // bottom right
-    while (col <= n && row <= n)
-    {
-        grid[col][row]--;
-        row++;
-        col++;
-    }
-
-    grid[orgCol][orgRow] += 3;
-}
-
-void dfs(int currCol, int currRow, int currCnt)
-{
-    for (int i = currCol; i <= n; i++)
-    {
-        for (int j = currRow; j <= n; j++)
-        {
-            // if we can put this, put it
-            if (grid[i][j] > 0)
-            {
-                place(i, j);
-                dfs(i, j, currCnt + 1);
-                release(i, j);
-            }
-        }
-    }
-
-    // Base Case : when we can't put no more chess
-    cnt = min(cnt, currCnt);
-}
-
 
 int main()
 {
-    input();
-    dfs(1, 1, 0);
-    cout << cnt;
+//    freopen("input.txt","r",stdin);
+    scanf("%d",&n);
+    int i,j;
+    for(i=1;i<=n;i++)
+    {
+        for(j=1;j<=n;j++)
+        {
+            scanf("%d",&inp[i][j]);
+        }
+    }
+
+    back(1,0);
+    printf("%d",ans);
+    return 0;
 }

@@ -2,12 +2,10 @@
 
 using namespace std;
 
-typedef pair<int, int> pii;
-
 int n;
 int board[15][15];
 int maxi = 0;
-pii temp[30];
+int reverseDiag[20 + 10];
 
 void input()
 {
@@ -17,88 +15,56 @@ void input()
         for (int j = 1; j <= n; j++)
             cin >> board[i][j];
     }
-
-    // 2 ~ 2*n diagnoals exist
-    for (int i = 0; i <= 2 * n; i++)
-    {
-        temp[i] = {0, 0};
-    }
 }
 
-bool promising(int row, int col)
-{
-    // 0. / diagonal number is determined by row + col
-    int diagonal = row + col;
-
-    // check until this diagonal
-    for (int i = 2; i < diagonal; i++)
-    {
-        int r = temp[i].first;
-        int c = temp[i].second;
-
-        if (r == 0 && c == 0)
-            continue;
-
-        // if this bishop is on X of previous diagonals
-        if (abs(row - r) == abs(col - c))
-        {
-            cout << "false here\n";
-            return false;
-        }
-    }
-
-    int r = temp[diagonal].first;
-    int c = temp[diagonal].second;
-
-    // if r and c is not 0,0 -> already exist
-    if (r != 0 || c != 0)
-    {
-        cout << "false here2 \n";
-        return false;
-    }
-
-    return true;
-}
-
+int temp;
 
 void dfs(int diagonal, int cnt)
 {
     // base case:
     if (diagonal == (2 * n + 1))
     {
-        maxi = max(maxi, cnt - 1);
+        maxi = max(maxi, cnt);
         return;
     }
 
-    // iterate row from 1 to min(diagonal - 1 and n)
+    bool flag = false;
 
-    for (int r = 1; r <= min(diagonal - 1, n); r++)
+    int dif = 0;
+    if (diagonal > n)
+    {
+        dif = diagonal - n - 1;
+    }
+
+    // iterate row from 1 to min(diagonal - 1 and n)
+    for (int r = 1 + dif; r <= min(diagonal - 1, n); r++)
     {
         int c = diagonal - r;
 
-        cout << diagonal << " " << r << " " << c << endl;
-        cout << temp[diagonal].first << " " << temp[diagonal].second << endl;
-
+        // if (diagonal > n)
+        //     cout << diagonal << " " << r << " " << c << endl;
+ 
         // if we can put it here
         if (board[r][c] == 1)
         {
             board[r][c] = 0;
-            temp[diagonal] = {r, c}; // say we put bishop here
-            cout << "we put it here\n";
-            if (promising(r, c))
+
+            // If no matching on '\' diagonal, '\' is remembered as row - col + n 
+            if (reverseDiag[r - c + n] == 0)
             {
-                cout << "it is promising\n";
+                flag = true;
+                reverseDiag[r - c + n] = 1;
                 dfs(diagonal + 1, cnt + 1);
+                reverseDiag[r - c + n] = 0;
             }
-            
-            // back to org state
+         
             board[r][c] = 1;
-            temp[diagonal] = {0,0};
         }
     }
 
-    // if this diagonal cannot be filled
-    dfs(diagonal + 1, cnt);
+    // if this / diagonal could be filled, another dfs can be pruned
+    if (!flag)
+        dfs(diagonal + 1, cnt);
 }
 
 int main()

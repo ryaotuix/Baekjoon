@@ -1,1 +1,3 @@
-        // if in same diagonal, same opposite diagonal
+     // if (diagonal > n)
+        //     cout << diagonal << " " << r << " " << c << endl;
+ 
