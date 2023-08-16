@@ -31,13 +31,10 @@ void input()
 
         adjList[from].push_back(to);
         adjList[to].push_back(from);
-
-        // sort this adj list 
-        // e.g. 1 <-> 3
-        // sort adjList[1] and adjList[3]
-        sort(adjList[from].begin(), adjList[from].end());
-        sort(adjList[to].begin(), adjList[to].end());
     }
+
+    for (int i = 1; i <= N; i++)
+        sort(adjList[i].begin(), adjList[i].end());
 }
 
 void dfs(int room)
