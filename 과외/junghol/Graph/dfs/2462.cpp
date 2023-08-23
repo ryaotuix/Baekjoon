@@ -2,90 +2,90 @@
 
 using namespace std;
 
+// materials
 int n;
 int m;
-int student[500 + 5];
-int inD[500 + 5];
-int outD[500 + 5];
 bool visited[500 + 5];
-vector<int> adjList[500 + 5];
-
+vector<int> orgAdj[500 + 5];
+vector<int> reverseAdj[500 + 5];
+int numChild = 0;
 
 void input()
 {
-    int n; int m;
     cin >> n >> m;
     for (int i = 0; i < m; i++)
     {
         int from;
         int to;
         cin >> from >> to;
-
-        adjList[from].push_back(to);
+        orgAdj[from].push_back(to);
+        reverseAdj[to].push_back(from);
     }
 }
 
-
-int dfs(int student)
+void reverseDFS(int student)
 {
     visited[student] = true;
-
-    int ret = 1;
-    
-    for (int nextS : adjList[student])
+    for (int nextS : reverseAdj[student])
     {
         if (!visited[nextS])
         {
+            numChild++;
             visited[nextS] = true;
-            inD[nextS]++;
-            ret += dfs(nextS);
+            reverseDFS(nextS);
         }
     }
+}
 
-    return ret;
+void orgDFS(int student)
+{
+    visited[student] = true;
+    for (int nextS : orgAdj[student])
+    {
+        if (!visited[nextS])
+        {
+            numChild++;
+            visited[nextS] = true;
+            orgDFS(nextS);
+        }
+    }
+}
+
+int getLess(int student)
+{
+    // init visited and numchild
+    numChild = 0;
+    memset(visited, false, sizeof(visited));
+    reverseDFS(student);
+    return numChild;
+}
+
+int getMore(int student)
+{
+    // init visited and numchild
+    numChild = 0;
+    memset(visited, false, sizeof(visited));
+    orgDFS(student);
+    return numChild;
 }
 
 
-int getStudentNum()
+int getTotal()
 {
     int ret = 0;
-
-    // get outdegree
     for (int i = 1; i <= n; i++)
     {
-        memset(visited, false, sizeof(visited));
-        int student = i;
-        int out = dfs(student);
-        cout << out;
-    }
-
-       // print ind and out
-    for (int i = 1; i <= n; i++)
-    {
-        cout << "Student " << i << ' ';
-        cout << "IND : " << inD[i] << " ";
-        cout << "OUT : " << outD[i] << "\n";
-    }
-    
-    for (int i = 1; i <= n; i++)
-    {
-        if (inD[i] + outD[i] == n)
+        if (getLess(i) + getMore(i) == n-1)
             ret++;
     }
 
-
-
     return ret;
 }
-
 
 int main()
 {
     ios_base::sync_with_stdio(0);
     cin.tie(0);
-
     input();
-    cout << dfs(1);
-    int res = getStudentNum();
-    cout << res;
+    cout << getTotal();
 }

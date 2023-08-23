@@ -5,7 +5,7 @@ using namespace std;
 int n;
 vector<string> strings;
 bool used[10] = {false, };
-string res;
+int ret = 0;
 
 void input()
 {
@@ -14,79 +14,79 @@ void input()
     {
         string temp;
         cin >> temp;
-        res += temp;
         strings.push_back(temp);
+        ret += temp.size();
     }
     
     return;
 }
 
-string combine(string & a, string & b)
-{
-    string s = a + b;
-    
-    int sizeDif = a.size() - b.size();
-    for (int i = a.size()-1; i >= max(0, sizeDif); i--)
-    {
-        int j = 0;
-        
-        if (b[j] == a[i])
-        {
-            // check if the rest of a is same as rest of b
-            int k = i;
-            bool found = true;
-            while(k < a.size())
-            {
-                if (b[j] != a[k])
-                {
-                    found = false;
-                    break;
-                }
-                k++;
-                j++;
-            }
 
-            if (found)
+int getExtra(string & a, string & b)
+{
+    int ret = b.size();
+
+    int dif = a.size()-b.size();
+    int last = max(0, dif);
+
+    // start index for str a
+    for (int i = a.size() - 1; i >= last; i--)
+    {
+        int k = i;  // index for str a
+        int j = 0;  // index for str b
+        bool change = true;
+
+
+        while (k < a.size())
+        {
+            if (b[j] != a[k])
             {
-                // edge case where if b > a and a is all matched and i starts from 0
-                if (b.size() > a.size() && i == 0)
-                    s = b;
-                else
-                    s = a.substr(0, i) + b;
+                change = false;
+                break;
             }
+            k++;
+            j++;
         }
+
+        if (change)
+        {
+            int newret = b.size()- (a.size() - i);
+            ret = min(ret, newret);
+        }
+
     }
 
-    return s;
+    return ret;
 }
 
-int arr[10];
-
-void dfs(string & comb, int cnt)
+void dfs(int prev, int currLen, int depth)
 {
-    // base case: if cnt == n, then we have counted all
-    if (cnt == n)
+    // base case:
+    if (depth == n)
     {
-        // replace res if new comb is shorter
-        if (comb.size() < res.size())
-        {
-            for (int i = 0; i < n; i++)
-                cout << arr[i] << " ";
-            cout << ": ";
-            cout << res << "\n";
-            res = comb;
-        }
+        ret = min(ret, currLen);
         return;
     }
 
-    for (int i = 0; i < strings.size(); i++)
+    for (int i = 0; i < n; i++)
     {
         if (!used[i])
         {
-            arr[cnt] = i;
             used[i] = true;
-            string s = combine(comb, strings[i]);
-            dfs(s, cnt + 1);
+
+            // starting with this word,
+            if (prev == -1)
+                currLen += strings[i].size();
+            else 
+                currLen += getExtra(strings[prev], strings[i]);
+            
+            dfs(i, currLen, depth + 1);
+
+            if (prev == -1)
+                currLen -= strings[i].size();
+            else 
+                currLen -= getExtra(strings[prev], strings[i]);
+
             used[i] = false;
         }
     }
@@ -98,24 +98,6 @@ int main()
     ios_base::sync_with_stdio(0);
     cin.tie(0);
     input();
-    cout << "\n";
-
-    string start = "";
-    int cnt = 0;
-    dfs(start, cnt);
-
-    cout << res.size() << "\n";
-    cout << res;
-
-    vector<string> vec = {"T", "TAG", "ACTG", "CA", "TGCAG"};
-    
-    cout << "\n";
-    cout << "-----------------------------\n";
-    string s = vec[0];
-    for (int i = 1; i < vec.size(); i++)
-    {
-        cout << s << " ";
-        s = combine(s, vec[i]);
-    }
-    cout << s;
+    dfs(-1, 0, 0);
+    cout << ret << endl;
 }
