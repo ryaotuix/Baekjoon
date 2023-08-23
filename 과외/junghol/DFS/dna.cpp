@@ -60,6 +60,7 @@ string combine(string & a, string & b)
     return s;
 }
 
+int arr[10];
 
 void dfs(string & comb, int cnt)
 {
@@ -68,7 +69,13 @@ void dfs(string & comb, int cnt)
     {
         // replace res if new comb is shorter
         if (comb.size() < res.size())
+        {
+            for (int i = 0; i < n; i++)
+                cout << arr[i] << " ";
+            cout << ": ";
+            cout << res << "\n";
             res = comb;
+        }
         return;
     }
 
@@ -76,6 +83,7 @@ void dfs(string & comb, int cnt)
     {
         if (!used[i])
         {
+            arr[cnt] = i;
             used[i] = true;
             string s = combine(comb, strings[i]);
             dfs(s, cnt + 1);
@@ -90,10 +98,24 @@ int main()
     ios_base::sync_with_stdio(0);
     cin.tie(0);
     input();
+    cout << "\n";
 
     string start = "";
     int cnt = 0;
     dfs(start, cnt);
 
-    cout << res.size();
+    cout << res.size() << "\n";
+    cout << res;
+
+    vector<string> vec = {"T", "TAG", "ACTG", "CA", "TGCAG"};
+    
+    cout << "\n";
+    cout << "-----------------------------\n";
+    string s = vec[0];
+    for (int i = 1; i < vec.size(); i++)
+    {
+        cout << s << " ";
+        s = combine(s, vec[i]);
+    }
+    cout << s;
 }
