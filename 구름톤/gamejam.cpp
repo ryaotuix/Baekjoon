@@ -1,108 +1,125 @@
 #include <bits/stdc++.h>
 
 using namespace std;
+/*
+    Idea : 
+    Start moving with the direction and the amount on the current position,
 
+    Iterate through the direction until the amount becomes 1
+        while iterating, if we encounter already visited position, return
+    
+    When doen iterating, move in new direction! according to new position where we ended
+*/
+
+const int MAX = 2 << 7;
+
+typedef pair<int, int> pii;
 
 // materials
 int n;
-int gRow;
-int gCol;
-int pRow;
-int pCol;
-string grid[200 + 5][200 + 5];
-bool visited[200 + 5][200 + 5];
+pii goorm;      // <g row, g col>
+pii player;     // <p row, p col>
+string grid[MAX][MAX];
+bool visited[MAX][MAX];
 
 
 
 void input()
 {
     cin >> n;
-    cin >> gRow >> gCol;
-    cin >> pRow >> pCol;
+
+    int row, col;
+    cin >> row >> col;  goorm = {row, col};
+    cin >> row >> col;  player = {row, col};
+
     for (int i = 1; i <= n; i++)
-    {
         for (int j = 1; j <= n; j++)
-        {
             cin >> grid[i][j];
-        }
-    }
 }
 
-
-int getMove(string s)
-{
-    return s[0] - '0';
-}
-
-char getDir(string s)
-{
-    return s[1];
-}
 
 int getCnt()
 {
     int cnt = 0;
 
     for (int i = 1; i <= n; i++)
-    {
         for (int j = 1; j <= n; j++)
-        {
             if (visited[i][j])
                 cnt++;
-        }
-    }
 
     return cnt;
 }
 
-int dfs(int currR, int currC, char direction, int move)
+// function to change position according to out of bound position
+void OOB(int & curr)
 {
-    // cout << currR << " " << currC << endl;
-    // cout << "moving : " << direction << " left : " << move << endl;
-    // base case
-    if (visited[currR][currC] == true)
-    {
-        return getCnt();
-    }
+    if (curr == 0)
+        curr = n;
+    if (curr == n+1)
+        curr = 1;
+}
 
-    // not based case
-    visited[currR][currC] = true;
-
-    // once we are done moving, update direction and move
-    if (move == 0)
-    {
-        direction = getDir(grid[currR][currC]);
-        move = getMove(grid[currR][currC]);
-    }
-
-    // when we still have to move,
+void moveToNext(char direction, pii & person)
+{
+    // Left
     if (direction == 'L')
     {
-        currC = currC - 1;
-        if (currC == 0)
-            currC = n;
+        person.second = person.second - 1;
+        OOB(person.second);
     }
-    if (direction == 'R')
+    // Right
+    else if (direction == 'R')
     {
-        currC = currC + 1;
-        if (currC == n+1)
-            currC = 1;
+        person.second = person.second + 1;
+        OOB(person.second);
     }
-    if (direction == 'U')
+    // Up
+    else if (direction == 'U')
     {
-        currR = currR - 1;
-        if (currR == 0)
-            currR = n;
+        person.first = person.first - 1;
+        OOB(person.first);
     }
-    if (direction == 'D')
+    // Down
+    else if (direction == 'D')
     {
-        currR = currR + 1;
-        if (currR == n+1)
-            currR = 1;
+        person.first = person.first + 1;
+        OOB(person.first);
+    }
+}
+
+int dfs(pii person, stringstream & ss)
+{
+    // person fisrt -> curr Row, person second -> curr Col
+
+    // base case
+    if (visited[person.first][person.second] == true) return getCnt();
+
+    visited[person.first][person.second] = true;
+
+    int move;
+    char direction;
+    
+    ss.str(grid[person.first][person.second]);
+    ss >> move >> direction;
+
+    // Moving to current direction until we are done moving
+    while (move)
+    {
+        // when we still have to move,
+        moveToNext(direction, person);
+
+        // base case
+        if (visited[person.first][person.second] == true) return getCnt();
+        
+        visited[person.first][person.second] = true;
+
+        move--;
     }
 
-    
-    return dfs(currR, currC, direction, move - 1);
+    // must make the last position not visited to start next direction with new dfs
+    visited[person.first][person.second] = false;
+
+    return dfs(person, ss);
 }
 
 
@@ -110,14 +127,17 @@ int main()
 {
     ios_base::sync_with_stdio(0);
     cin.tie(0);
+
     input();
+    
+    stringstream ss;
 
-    int goorm = dfs(gRow , gCol, grid[gRow][gCol][1], getMove(grid[gRow][gCol]) );
+    int goormCNT = dfs(goorm, ss);
     memset(visited, false, sizeof(visited));
-    int player = dfs(pRow , pCol, grid[pRow][pCol][1], getMove(grid[pRow][pCol]) );
+    int playerCNT = dfs(player, ss);
 
-    if (goorm > player)
-        cout << "goorm " << goorm;
+    if (goormCNT > playerCNT)
+        cout << "goorm " << goormCNT;
     else
-        cout << "player " << player;
+        cout << "player " << playerCNT;
 }

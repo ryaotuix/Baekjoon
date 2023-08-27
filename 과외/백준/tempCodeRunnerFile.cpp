@@ -1,1 +1,1 @@
-    cout << currR << " " << currC << endl;
+    // cout << "curr : " << curr <<  " length : " << length << "\n";
