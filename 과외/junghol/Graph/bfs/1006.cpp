@@ -43,6 +43,11 @@ void input()
     Q.push(start);
 }
 
+void enqueue(robot & robot)
+{
+    Q.push(robot);
+}
+
 void makeVisited(robot & robot)
 {
     visited[robot.row][robot.col][robot.dir] = true;
@@ -60,23 +65,9 @@ bool OOB(int r, int c)
     return false;
 }
 
-int turnLeft(int dir)
-{
-    if (dir == 1) return 4;
-    else if (dir == 4) return 2;
-    else if (dir == 2) return 3;
-    else if (dir == 3) return 1;
-    return -1;
-}
-
-int turnRight (int dir)
-{
-    if (dir == 1) return 3;
-    else if (dir == 3) return 2;
-    else if (dir == 2) return 4;
-    else if (dir == 4) return 1;
-    return -1;
-}
+    // change     1  2  3  4 to
+int toRight[] = {0, 3, 4, 2, 1};
+int toLeft[] =  {0, 4, 3, 1, 2};
 
 // int cnt = 0;
 int bfs()
@@ -108,7 +99,7 @@ int bfs()
             {
                 robot next = makeRobot(nR, nC, nD, nL);
                 makeVisited(next);
-                Q.push(next);
+                enqueue(next);
             }
         }
 
@@ -117,21 +108,21 @@ int bfs()
         int nL = curr.level + 1;
 
         // LEFT
-        int nD = turnLeft(curr.dir);
+        int nD = toLeft[curr.dir];
         if (!visited[nR][nC][nD])
         {
             robot next = makeRobot(nR, nC, nD, nL);
             makeVisited(next);
-            Q.push(next);
+            enqueue(next);
         }
 
         // RIGHT
-        nD = turnRight(curr.dir);
+        nD = toRight[curr.dir];
         if (!visited[nR][nC][nD])
         {
             robot next = makeRobot(nR, nC, nD, nL);
             makeVisited(next);
-            Q.push(next);
+            enqueue(next);
         }
     }
 
