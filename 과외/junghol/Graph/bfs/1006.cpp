@@ -3,137 +3,140 @@
 using namespace std;
 
 const int MAX = 100 + 5;
-int row, col;               // row an col
-int grid[MAX][MAX];         // input
-bool visited[MAX][MAX][5];  // save visited
-                            // ex) E, W, S, N = 1, 2, 3, 4
-
 typedef struct robot
 {
-    int r;
-    int c;
+    int row;
+    int col;
     int dir;
     int level;
+    
+    bool operator==(const robot & r) const {
+        if (row == r.row && col == r.col && dir == r.dir) return true;
+        return false;
+    }
+    
 }robot;
 
-// Queue of robot
+// array for direction
+//             동 서  남  북
+int dr[] = {0, 0, 0, 1, -1};
+int dc[] = {0, 1, -1, 0, 0};
+
+bool visited[MAX][MAX][5]; 
+int grid[MAX][MAX];
+int row, col;
+robot start, finish;
 queue<robot> Q;
-robot start;        // robot at start position
-robot finish;       // robot at end position   
 
 void input()
 {
-    // fill grid
     cin >> row >> col;
     for (int i = 1; i <= row; i++)
         for (int j = 1; j <= col; j++)
             cin >> grid[i][j];
 
-    // fill start and finish
-    cin >> start.r >> start.c >> start.dir;
-    cin >> finish.r >> finish.c >> finish.dir;
+    cin >> start.row >> start.col >> start.dir;
+    cin >> finish.row >> finish.col >> finish.dir;
 
-    // make all unvisited
-    for (int i = 0; i <= row; i++)
-        for (int j = 0; j <= col; j++)
-            for (int k = 0; k < 5; k++)
-                visited[i][j][k] = false;
-
-
-    // visited path to start position is 0 and push it to queue
-    visited[start.r][start.c][start.dir] = true;  // mark the visited path to start position 0
     start.level = 0;
+
     Q.push(start);
 }
 
-bool reachedEnd(robot curr)
+void makeVisited(robot & robot)
 {
-    if (curr.c == finish.c && curr.r == finish.r && curr.dir == finish.dir) return true;
-    return false;
+    visited[robot.row][robot.col][robot.dir] = true;
+}
+
+robot makeRobot(int r, int c, int dir, int level)
+{
+    return {r, c, dir, level};
 }
 
 bool OOB(int r, int c)
 {
-    if (r < 1 || r > row) return true;
-    if (c < 1 || c > col) return true;
+    if (r > row || r < 1) return true;
+    if (c > col || c < 1) return true;
     return false;
 }
 
-int turnL(int n)
+int turnLeft(int dir)
 {
-    int res = n-1;
-    if (res == 0) res = 4;
-    return res;
+    if (dir == 1) return 4;
+    else if (dir == 4) return 2;
+    else if (dir == 2) return 3;
+    else if (dir == 3) return 1;
+    return -1;
 }
 
-int turnR(int n)
+int turnRight (int dir)
 {
-    int res = n+1;
-    if (res == 5) res = 1;
-    return res;
+    if (dir == 1) return 3;
+    else if (dir == 3) return 2;
+    else if (dir == 2) return 4;
+    else if (dir == 4) return 1;
+    return -1;
 }
 
-
-void bfs()
+// int cnt = 0;
+int bfs()
 {
-    // 동 서 남 북
-    // 1 2 3 4
-    int dr[5] = {0, 0, 0, 1, -1};
-    int dc[5] = {0, 1, -1, 0, 0};
-
     while(!Q.empty())
     {
         robot curr = Q.front(); Q.pop();
+        
+        // cout << cnt++ << ": " << curr.row << " " << curr.col << " " << curr.dir << " " << curr.level << "\n";
+        
+        // if current is finish, return level
+        if (curr == finish) return curr.level;
 
-        // if current is end
-        if (reachedEnd(curr))
-        {
-            cout << curr.level;
-            return;
-        }
-
-        // go 1, 2, 3 in this direction
+        // direction 1~3
         for (int dist = 1; dist <= 3; dist++)
         {
-            int nextR = curr.r + (dist * dr[curr.dir]);
-            int nextC = curr.c + (dist * dc[curr.dir]);
-            int nextD = curr.dir;
+            int nR = curr.row + (dist * dr[curr.dir]);
+            int nC = curr.col + (dist * dc[curr.dir]);
+            int nD = curr.dir;
+            int nL = curr.level + 1;
+            
+            // out of bound,
+            if (OOB(nR, nC)) break;
 
-            // OOB
-            if (OOB(nextR, nextC)) break;
+            // if wall
+            if (grid[nR][nC] == 1) break;
 
-            // Can't go
-            if (grid[nextR][nextC] == 1) break;
-
-            // if visited in visited
-            if (visited[nextR][nextC][nextD]) continue;
-
-            // otherwise
-            visited[nextR][nextC][nextD] = true;
-            Q.push({nextR, nextC, nextD, curr.level + 1});
+            if (!visited[nR][nC][nD])
+            {
+                robot next = makeRobot(nR, nC, nD, nL);
+                makeVisited(next);
+                Q.push(next);
+            }
         }
 
-        // turn left and right
-        int nextR = curr.r;
-        int nextC = curr.c;
+        int nR = curr.row;
+        int nC = curr.col;
+        int nL = curr.level + 1;
 
-        int nextD = turnL(curr.dir);
-        if (!visited[nextR][nextC][nextD])
+        // LEFT
+        int nD = turnLeft(curr.dir);
+        if (!visited[nR][nC][nD])
         {
-            visited[nextR][nextC][nextD] = true;
-            Q.push({nextR, nextC, nextD, curr.level + 1});
+            robot next = makeRobot(nR, nC, nD, nL);
+            makeVisited(next);
+            Q.push(next);
         }
 
-        nextD = turnR(curr.dir);
-        if (!visited[nextR][nextC][nextD])
+        // RIGHT
+        nD = turnRight(curr.dir);
+        if (!visited[nR][nC][nD])
         {
-            visited[nextR][nextC][nextD] = true;
-            Q.push({nextR, nextC, nextD, curr.level + 1});
+            robot next = makeRobot(nR, nC, nD, nL);
+            makeVisited(next);
+            Q.push(next);
         }
     }
+
+    return -1;
 }
-
-
 
 int main()
 {
@@ -141,5 +144,6 @@ int main()
     cin.tie(0);
 
     input();
-    bfs();
+    int tasks = bfs();
+    cout << tasks;
 }
