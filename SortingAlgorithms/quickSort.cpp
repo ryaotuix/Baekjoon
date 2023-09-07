@@ -2,8 +2,8 @@
 
 using namespace std;
 
-// Arr information
-vector<int> arr = {1,2,3,4,5,6,7,8,9,10,11};
+// Arr informationc
+vector<int> arr = {1,6,3,5,7,4};
 const int len = arr.size();
 
 
