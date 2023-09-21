@@ -2,79 +2,41 @@
 
 using namespace std;
 
-
-typedef pair<int, int> location;     // location x and y
-const int MAX = 5000 + 5;            // MAX Bus number
-
-typedef struct Bus
+typedef struct bus
 {
-    location begin;
-    location finish;
-    bool bIsVertical;       
-}Bus;
+    int x1, y1;
+    int x2, y2;
+    bool isVertical;
+}bus;
 
-Bus buses[MAX];                 // store all buses 
-bool visited[MAX];              // visited 
-int M, N;
-int K;
-
-location start;                 // start
-location dest;                  // dest
-
-bool CanDestination(Bus & bus)
+bool isOverlap(bus & a, bus & b)
 {
-    // bus is vertical
-    if (bus.bIsVertical)
+    // When a and b have same direction
+    if (a.isVertical == b.isVertical)
     {
-        // check if destination's x is the same
-        if (dest.first != bus.begin.first) return false;
-
-        // check if destination's y is within the range of Bus
-        if (dest.second <= bus.finish.second && dest.second >= bus.begin.second) return true;
-        else return false;
+        // a is vertical and two xs are the same
+        if (a.isVertical == true && a.x1 == b.x1)
+        {
+            if (a.y2 < b.y1 || b.y2 < a.y1)
+                return false;
+            else
+                return true;
+        }
     }
-    // bus is horizontal
-    else
+    // if case 2
+    if (a.isVertical == false && a.y1 == b.y1)
     {
-        // check if destination's y is same 
-        if (dest.second != bus.begin.second) return false;
 
-        // check if destination's x is within the range of Bus
-        if (dest.first <= bus.finish.first && dest.first >= bus.begin.first) return true;
-        else return false;
     }
-
-    return true;
 }
 
-
-
-void Input()
+void input()
 {
-    cin >> M >> N;
-    cin >> K;
-
-    for (int i = 0; i < K; i++)
-    {
-        int bus_num, sx, sy, dx, dy; 
-        cin >> bus_num >> sx >> sy >> dx >> dy;
-        
-        bool isVertical = (sx == dx) ? true : false;    // if x is the same, it is vertical 
-        Bus bus = {{sx, sy}, {dx, dy}, isVertical};
-        buses[bus_num] = bus;
-    }
-
-    cin >> start.first >> start.second >> dest.first >> dest.second;
+    
 }
-
-
-
 
 int main()
 {
     ios_base::sync_with_stdio(0);
     cin.tie(0);
-
-    Input();
-    
 }
