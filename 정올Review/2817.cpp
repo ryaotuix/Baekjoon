@@ -4,17 +4,15 @@ using namespace std;
 
 int k;
 int lotto[50 + 5];
-// combination of 6
-int res[6] = {0,};
+int res[6] = {0,};  // combination of 6
 
 void input()
 {
     cin >> k;
 
-    // input is already sorted
+    // input is already sorted -> no need to sort
     for (int i = 0; i < k; i++) cin >> lotto[i];  
 }
-
 
 
 void dfs(int depth, int start)
