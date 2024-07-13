@@ -4,7 +4,7 @@ using namespace std;
 
 typedef long long ll;
 typedef vector<vector<ll>> matrix;
-const ll mod = 1000000007;
+const ll mod = 1000000;
 
 ll n;
 
