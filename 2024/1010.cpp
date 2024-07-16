@@ -5,50 +5,27 @@ using namespace std;
 int T;
 int N, M;
 const int MAX = 30 + 1;
-
-int dp[MAX][MAX];
+int C[MAX][MAX];
 
 void init()
 {
-    // init base case
-    for (int i = 0 ; i < MAX; i++)
+    // base case 
+    for (int i = 0; i < MAX; i++)
     {
-        dp[i][0] = dp[i][i] = 1;
+        // iCi and iC0 is 1
+        C[i][i] = 1;
+        C[i][0] = 1; 
     }
 }
 
-void getComb()
+int comb(int n, int r)
 {
-    for (int i = 1; i < MAX; i ++)
-    {
-        for (int j = i; j < MAX; j++)
-        {
-            if (dp[j][i]!= 0) continue;
-            else
-            {
-                dp[j][i] = dp[j-1][i-1] + dp[j-1][i];
-            }
-        }
-    }
+    // if it is already filled return
+    if (C[n][r] != 0) return C[n][r];
 
-    // for (int i = 0; i < MAX; i++)
-    // {
-    //     for (int j = 0; j < MAX; j++)
-    //     {
-    //         cout << dp[i][j] << " ";
-    //     }
-    //     cout << "\n";
-    // }
-}
+    C[n][r] = comb(n-1,r-1) + comb(n-1,r);
 
-void input()
-{
-    cin >> T;
-    while (T--)
-    {
-        cin >> N >> M;
-        cout << dp[M][N] << "\n";
-    }
+    return C[n][r];
 }
 
 int main()
@@ -57,7 +34,13 @@ int main()
     cin.tie(0);
 
     init();
-    getComb();
-    input();
-
+    cin >> T;
+    while (T--)
+    {
+        cin >> N >> M;
+        cout << comb(M,N) << "\n";
+    }
+    
+    return 0;
 }
+
