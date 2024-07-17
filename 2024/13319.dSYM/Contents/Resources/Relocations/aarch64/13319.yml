@@ -1,0 +1,9 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/ryaotuix/Algorithm/Baekjoon/2024/13319'
+relocations:
+  - { offsetInCU: 0x26, offset: 0x26, size: 0x8, addend: 0x0, symName: __Z3mulxxx, symObjAddr: 0x0, symBinAddr: 0x100003BB0, symSize: 0xE0 }
+  - { offsetInCU: 0x41, offset: 0x41, size: 0x8, addend: 0x0, symName: __Z3mulxxx, symObjAddr: 0x0, symBinAddr: 0x100003BB0, symSize: 0xE0 }
+  - { offsetInCU: 0x89, offset: 0x89, size: 0x8, addend: 0x0, symName: __Z2pwxxx, symObjAddr: 0xE0, symBinAddr: 0x100003C90, symSize: 0xAC }
+  - { offsetInCU: 0xDF, offset: 0xDF, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x18C, symBinAddr: 0x100003D3C, symSize: 0x1CC }
+...

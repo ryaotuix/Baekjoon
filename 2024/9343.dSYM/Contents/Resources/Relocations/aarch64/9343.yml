@@ -1,0 +1,14 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/ryaotuix/Algorithm/Baekjoon/2024/9343'
+relocations:
+  - { offsetInCU: 0x26, offset: 0x26, size: 0x8, addend: 0x0, symName: __Z7initFacv, symObjAddr: 0x0, symBinAddr: 0x100003BE4, symSize: 0x98 }
+  - { offsetInCU: 0x3F, offset: 0x3F, size: 0x8, addend: 0x0, symName: _N, symObjAddr: 0x14404, symBinAddr: 0x100008000, symSize: 0x0 }
+  - { offsetInCU: 0x5B, offset: 0x5B, size: 0x8, addend: 0x0, symName: _factorial, symObjAddr: 0x14408, symBinAddr: 0x100008004, symSize: 0x0 }
+  - { offsetInCU: 0x7305, offset: 0x7305, size: 0x8, addend: 0x0, symName: __Z7initFacv, symObjAddr: 0x0, symBinAddr: 0x100003BE4, symSize: 0x98 }
+  - { offsetInCU: 0x733B, offset: 0x733B, size: 0x8, addend: 0x0, symName: __Z6getFaci, symObjAddr: 0x98, symBinAddr: 0x100003C7C, symSize: 0x24 }
+  - { offsetInCU: 0x7367, offset: 0x7367, size: 0x8, addend: 0x0, symName: __Z3powii, symObjAddr: 0xBC, symBinAddr: 0x100003CA0, symSize: 0x10C }
+  - { offsetInCU: 0x73AF, offset: 0x73AF, size: 0x8, addend: 0x0, symName: __Z10getCatalinv, symObjAddr: 0x1C8, symBinAddr: 0x100003DAC, symSize: 0x108 }
+  - { offsetInCU: 0x740F, offset: 0x740F, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x2D0, symBinAddr: 0x100003EB4, symSize: 0x94 }
+  - { offsetInCU: 0x74DF, offset: 0x74DF, size: 0x8, addend: 0x0, symName: __ZNSt3__19basic_iosIcNS_11char_traitsIcEEE3tieB8ue170006EPNS_13basic_ostreamIcS2_EE, symObjAddr: 0x364, symBinAddr: 0x100003F48, symSize: 0x2C }
+...
