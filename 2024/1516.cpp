@@ -64,7 +64,7 @@ void topologicalSort()
         {
             // reduce indegree
             indegree[next]--;
-            res[next] += res[curr];  // 지금까지의 최단거리 더하기
+            res[next] = max(res[next], res[curr] + tme[next]);
 
 
             if (indegree[next] == 0)

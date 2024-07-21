@@ -53,7 +53,7 @@ void getCatalin()
 
     // cout << A << " " << B << ' ' << C << "\n";
 
-    cout << ((A*B) % MOD * C) % MOD;
+    cout << ((A*B) % MOD * C) % MOD << "\n";
 }
 
 int main()

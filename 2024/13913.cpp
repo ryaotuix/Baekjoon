@@ -2,10 +2,11 @@
 
 using namespace std;
 
-const int MAX = 100000 + 1;
-int arr[MAX];       // 몇번 사용해서 도착해하는가
+const int MAX = 100000+1;
+int path[MAX];
+bool visited[MAX];
 int N, K;
-int cnt = 0;
+vector<int> stk;
 
 void input()
 {
@@ -14,63 +15,65 @@ void input()
 
 bool OOB(int n)
 {
-    if (n < 0 || n >= MAX)  return true;
-    return false;
+    return (n < 0 || n >= MAX);
 }
+
 
 void bfs()
 {
     queue<int> q;
     q.push(N);
-    arr[N] = 1;
+    path[N] = -1;       // start position is init as -1
+    visited[N] = true;
 
     while(!q.empty())
     {
         int curr = q.front();
         q.pop();
 
-
         int dir[3] = {curr-1, curr+1, curr*2};
-
         for (int i = 0; i < 3; i++)
         {
             int next = dir[i];
             if (!OOB(next))
             {
-                // if moving
-                if (i < 2)
-                {
-                    // if visited and this time takes longer, skip
-                    if (arr[next] != 0 && arr[next] < arr[curr] + 1)
-                        continue;
-                
-                    
-                    // 다음까지 가는데 지금 + 1
-                    arr[next] = arr[curr] + 1;
-                    q.push(next);
-                }
-                else
-                {
-                    // if visited and this time takes longer, skip
-                    if (arr[next] != 0 && arr[next] < arr[curr])
-                        continue;
+                // if already visited
+                if (visited[next]) continue;
 
-                    // 다음까지 가는데 지금
-                    arr[next] = arr[curr];
-                    q.push(next);
-                }
-                
-
+                visited[next] = true;
+                path[next] = curr;  // mark that it came from curr
+                q.push(next);
             }
         }
     }
+}
+
+void dfs(int & depth, int curr)
+{
+    stk.push_back(curr);
+
+    // base case
+    if (curr == N)  return;
+    
+    depth++;
+    dfs(depth, path[curr]);
 }
 
 int main()
 {
     ios_base::sync_with_stdio(0);
     cin.tie(0);
+
     input();
     bfs();
-    cout << arr[K] - 1 << "\n";
+
+    int cnt = 0;
+    dfs(cnt, K);
+
+
+    cout << cnt << "\n";
+    for (int i = stk.size() - 1; i >= 0; i--)
+    {
+        cout << stk[i] << " ";
+    }
 }
