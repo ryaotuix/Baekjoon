@@ -25,18 +25,43 @@ void input()
 void solve()
 {
     queue<int> q;
-    for (int i = 1; i <= N; i++)
-    {
-        if (indegree[i] == 0)
-        {
-            q.push(i);
-            path[i].push_back({i});
-        }
-    }
+    q.push(1);
+    path[1].push_back(1);
 
     while(!q.empty())
     {
-        
+        int curr = q.front();
+        q.pop();
+
+        for (int next = 1; next <= N; next++)
+        {
+            // if curr -> next has path
+            if (graph[curr][next] != 0)
+            {
+                // 바뀔거면
+                if (dp[next] < dp[curr] + graph[curr][next])
+                {
+                    dp[next] = dp[curr] + graph[curr][next];        // 합 업데이트
+
+                    path[next] = path[curr];                        // path vector 업데이트
+                    path[next].push_back(next);
+                }
+
+                indegree[next]--;
+
+                if (indegree[next] == 0)
+                {
+                    q.push(next);
+                }
+            }
+        }
+    }
+
+    
+    cout << dp[1] << "\n";
+    for (int i : path[1])
+    {
+        cout << i << " ";
     }
 }
 
@@ -44,4 +69,6 @@ int main()
 {
     ios_base::sync_with_stdio(0);
     cin.tie(0);
+    input();
+    solve();
 }
