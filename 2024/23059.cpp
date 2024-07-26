@@ -7,7 +7,7 @@ unordered_map<string, int> um;  // item name, index
 unordered_map<int, string> m;   // index, item name
 typedef pair<int, int> pii;     // <index, topological level>
 
-const int MAX = 200000 + 1;
+const int MAX = 400000 + 1;
 vector<int> graph[MAX];
 vector<string> topology[MAX];
 int indegree[MAX];
@@ -59,7 +59,7 @@ void input()
 void topologicalSort()
 {
     queue<pii> q;
-    for (int i = 1; i <= N; i++)
+    for (int i = 1; i < ind; i++)
     {
         if (indegree[i] == 0)
         {
@@ -68,7 +68,7 @@ void topologicalSort()
     }
 
     int len = 1;
-    int cnt = 1;
+    int cnt = 0;
 
     while(!q.empty())
     {
@@ -92,12 +92,21 @@ void topologicalSort()
         }
     }
 
-    for (int i = 1; i <= len; i++)
+    if (ind-1 != cnt)
     {
-        sort(topology[i].begin(), topology[i].end());
-        for (string s : topology[i])
-            cout << s << "\n";
+        cout << -1;
     }
+    else
+    {
+        // if we can make top sort
+        for (int i = 1; i <= len; i++)
+        {
+            sort(topology[i].begin(), topology[i].end());
+            for (string s : topology[i])
+                cout << s << "\n";
+        }
+    }
+    
 
     return;
 }
