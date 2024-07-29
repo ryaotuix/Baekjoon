@@ -1,1 +1,1 @@
-sccIndex
+            cout << sum << " ";
