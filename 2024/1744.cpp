@@ -2,88 +2,104 @@
 
 using namespace std;
 
-int N;
-vector<int> vec1;   // > 0
-vector<int> vec2;   // <= 0
+/*
+    separate numbers into
+    1. negative
+    2. 0 and 1
+    3. positive
 
-void input()
+    sort negatvie in ascending order
+    sort positive in descending order
+
+    if (negative size is odd)
+        -> multiply each besides the last one
+
+    if (positive side is odd)
+        -> multiply each besides the last one
+*/
+
+
+// return [sum, remaining value]
+vector<int> multiplyVector(vector<int> &vec)
 {
-    cin >> N;
-    while(N--)
+    int len = vec.size();
+    // if size is odd, there is remaining value
+    if (len % 2 == 1)
     {
-        int temp;
-        cin >> temp;
-        if (temp <= 0)
-            vec2.push_back(temp);
-        else
-            vec1.push_back(temp);
-    }
-    
-    int sum = 0;
-    // sort vec1 in descending order
-    sort(vec1.begin(), vec1.end(), greater<int>());
-    // sort vec2 in ascending order
-    sort(vec2.begin(), vec2.end());
+        int sum = 0;
+        int i = 0;
+        while (i < len - 1)
+        {
+            sum += vec[i] * vec[i + 1];
+            i += 2;
+        }
 
-    if (vec1.size() == 0)
-    {
-
+        return {sum, vec[len - 1]};
     }
-    else if (vec1.size() == 1)
-    {
-        sum += vec1[0];
-    }
+    // if size is even,
     else
     {
-        for (int i = 0; i < vec1.size()-1; i++)
+        int sum = 0;
+        int i = 0;
+        while (i < len)
         {
-            if (vec1[i] * vec1[i+1] > vec1[i] + vec1[i+1])
-            {
-                sum += vec1[i] * vec1[i+1];
-                i++;
-            }
-            else
-            {
-                sum += vec1[i];
-            }
-
-            cout << "now i is " << i << " " << sum << " ";
+            sum += vec[i] * vec[i + 1];
+            i += 2;
         }
-        sum += vec1[vec1.size() - 1];
-
+        return {sum, 0};
     }
-
-    if (vec2.size() == 0)
-    {
-        
-    }
-    else if (vec2.size() == 1)
-    {
-        sum += vec2[0];
-    }
-    else
-    {
-        for (int i = 0; i < vec2.size()-1; i++)
-        {
-            if (vec2[i] * vec2[i+1] > vec2[i] + vec2[i+1])
-            {
-                sum += vec2[i] * vec2[i+1];
-                i++;
-            }
-            else
-            {
-                sum += vec2[i];
-            }
-            cout << sum << " ";
-        }
-        sum += vec2[vec2.size() - 1];
-    }
-    cout << sum;
 }
+
+// 
 
 int main()
 {
     ios_base::sync_with_stdio(0);
     cin.tie(0);
-    input();
+
+    int N;
+    cin >> N;
+    vector<int> negative;
+    vector<int> positive;
+    bool isZero = false;
+    int oneCnt = 0;
+
+    while(N--)
+    {
+        int temp;
+        cin >> temp;
+
+        if (temp < 0)
+        {
+            negative.push_back(temp);
+        }
+        else if (temp == 0)
+        {
+            isZero = true;
+        }
+        else if (temp == 1)
+        {
+            oneCnt++;
+        }
+        else
+        {
+            positive.push_back(temp);
+        }
+    }
+
+    // sort negative in ascending
+    sort(negative.begin(), negative.end());
+    // sort positive in descending
+    sort(positive.begin(), positive.end(), greater<int>());
+
+    vector<int> resNegative = multiplyVector(negative);
+    vector<int> resPositive = multiplyVector(positive);
+
+    int sum = resNegative[0] + resPositive[0] + resPositive[1] + oneCnt;
+    if (!isZero)
+    {
+        sum += resNegative[1];
+    }
+
+    cout << sum;
 }
